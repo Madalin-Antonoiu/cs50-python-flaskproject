@@ -6,6 +6,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello, {{ name }}</h1>
+    <h1>I am {{ name }} and this is Dynamic Content</h1>
+    <h2>Your random number is {{ onetoten }} (keep refreshing the page)</h2>
+    <h3>You have drawn {{ number }}</h3>
+    
+    {% if number == 1%}
+        Your coin flip is HEADS
+    {% else %}
+        Your coin flip is TAILS
+    {% endif %}
+
 </body>
 </html>
