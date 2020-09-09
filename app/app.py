@@ -1,14 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import random
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    onetoten = random.randint(0, 10)
     rnr = random.randint(0, 1)
-    return render_template("index.html", name="Madalin", number = rnr, onetoten=onetoten)
+    return render_template("index.html",  number = rnr)
 
-@app.route("/about")
-def about():
-    return "Testing about "
+@app.route("/hello")
+def hello():
+    text = request.args.get("user_text")
+    return render_template("hello.html",  text = text)
