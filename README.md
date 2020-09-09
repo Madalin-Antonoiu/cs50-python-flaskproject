@@ -40,3 +40,8 @@
 `
 
 https://dev.to/lukeinthecloud/python-auto-reload-using-flask-ci6
+
+
+
+#### Extra infor :
+- templates folder should always be inside app folder
