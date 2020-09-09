@@ -24,7 +24,7 @@
 
 4. From within app folder :
 
-    `export FLASK_APP=app.py && flask run`  
+    `export FLASK_APP=app.py && export FLASK_ENV=development&& && flask run`  
 
 
   
@@ -33,5 +33,10 @@
 
 - `py -m venv venv && cd venv/Scripts/ && . activate` - activate the venv
 
-- `pip install flask && pip install pylint && && cd .. && cd .. && mkdir app && cd app && echo > app.py` - install flask and pylint, go to root directory, create app directory, create app. py file inside app dir
+- `pip install flask && pip install pylint && cd .. && cd .. && mkdir app && cd app && echo > app.py` - install flask and pylint, go to root directory, create app directory, create app. py file inside app dir
 
+## Getting back to the project:
+`cd venv/Scripts/ && . activate && cd .. && cd .. && cd app && export FLASK_APP=app.py && export FLASK_ENV=development && flask run
+`
+
+https://dev.to/lukeinthecloud/python-auto-reload-using-flask-ci6
