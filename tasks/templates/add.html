@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h1>Add a Task</h1>
+
+    <form action="/add" method="POST">
+        <input id="task" name ="task" type="text" placeholder="Task name">
+        <input id="submit" type="submit" disabled>
+    </form>
+
+
+    <a href="/">Back to Home</a>
+
+
+    <script>
+        document.getElementById("task").onkeyup = function (){
+            if( document.getElementById("task").value === ""){
+                document.getElementById("submit").disabled = true;
+            } else {
+                document.getElementById("submit").disabled = false;
+            }
+        }
+    </script>
+
+{% endblock %}
