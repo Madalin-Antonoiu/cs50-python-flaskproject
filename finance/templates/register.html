@@ -2,8 +2,40 @@
 
 {% block body %}
 
-    <h1>Register</h1>
+<form action="/register" method="POST" class="uk-position-large  uk-margin-xlarge-top uk-position-top-center" >
 
-    <a href="/">Go back</a>
+    <div class="uk-margin">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: mail"></span>
+            <input name="email" class="uk-input" type="email" placeholder="Email">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: user"></span>
+            <input name="username" class="uk-input" type="email" placeholder="Username">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: lock"></span>
+            <input name="password" class="uk-input" type="password" placeholder="Password">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: lock"></span>
+            <input name="verify_password" class="uk-input" type="password" placeholder="Verify Password">
+        </div>
+    </div>
+
+    <div class="uk-margin" uk-margin>
+        <button class="uk-button uk-button-default uk-align-center uk-button-primary">Register</button>
+    </div>
+
+</form>
 
 {% endblock %}

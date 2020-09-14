@@ -19,12 +19,20 @@
         </div>
 
         <div class="uk-margin" uk-margin>
-            <button class="uk-button uk-button-default uk-align-center uk-button-primary">Submit</button>
+            <button class="uk-button uk-button-default uk-align-center uk-button-primary">Login</button>
         </div>
 
     </form>
 
-    <!-- <h3>Registered accounts:</h3>
-    {{ rows }} -->
+    <div class="uk-position-bottom-center uk-position-large">
+        <h3>Registered users:</h3>
+        <ul>
+            {% for row in rows %}
+                <!-- <li>{{ row }}</li> --> 
+                <li>{{ row["name"]}} ({{ row["email"]}})</li>
+            {% endfor %}
+        </ul>
+    </div>
+
 
 {% endblock %}
