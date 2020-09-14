@@ -11,4 +11,6 @@ def index():
 @app.route("/hello")
 def hello():
     text = request.args.get("user_text")
+    if not text:
+        return render_template("failure.html")
     return render_template("hello.html",  text = text)
