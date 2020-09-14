@@ -43,5 +43,17 @@ https://dev.to/lukeinthecloud/python-auto-reload-using-flask-ci6
 
 
 
+
+### SQL commands:
+"C:\sqlite" has been added to environment path so i can use globally sqlite3 command.
+You can also use SQLite Studio if you want a GUI.
+
+Being inside of register folder, run sqlite3 data.db
+1. SELECT * from registrants; - Read all the entries and iaplay them
+2. INSERT INTO registrants (name, email) VALUES ('Bob','bob@sqlite3.com'); - adding new values to the registrants table i created
+
+
+
+
 #### Extra infor :
 - templates folder should always be inside app folder
