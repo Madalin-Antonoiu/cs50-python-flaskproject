@@ -1,11 +1,21 @@
 {% extends "layout.html" %}
+
 {% block title %} Home {% endblock %} 
+
+{% block style %} 
+    <style type="text/css">
+        th {
+            text-transform: none !important;
+        }
+    </style>
+{% endblock %}
+
 
 {% block body %}
 
 <div class="uk-overflow-auto">
     <table class="uk-table uk-table-striped uk-table-hover">
-        <thead>
+        <thead >
             <tr>
                 <th>Symbol</th>
                 <th>Names</th>

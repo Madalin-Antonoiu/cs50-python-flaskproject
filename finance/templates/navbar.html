@@ -1,3 +1,9 @@
+{% block style %} 
+<style type="text/css">
+    ul li a {text-transform: none !important}
+</style>
+{% endblock %}
+
 <nav class="uk-navbar-container" uk-navbar>
 
     {% if session.user_id %}
@@ -6,10 +12,10 @@
             <a class="uk-navbar-item uk-logo" href="/">Financer</a>
 
             <ul class="uk-navbar-nav">
-                <li><a style="text-transform: none !important" href="/quote">Quote</a></li>
-                <li><a style="text-transform: none !important" href="/buy">Buy</a></li>
-                <li><a style="text-transform: none !important" href="/sell">Sell</a></li>
-                <li><a style="text-transform: none !important" href="/history">History</a></li>
+                <li><a href="/quote">Quote</a></li>
+                <li><a href="/buy">Buy</a></li>
+                <li><a href="/sell">Sell</a></li>
+                <li><a href="/history">History</a></li>
             </ul>
 
         </div>
@@ -18,14 +24,14 @@
 
             <ul class="uk-navbar-nav">
                 <li> 
-                    <a href="/user" style="text-transform: none !important">
+                    <a href="/user">
                         <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
                         {{ session["username"] }}
                     </a>
                 </li>
 
                 <li>
-                    <a  style="text-transform: none !important" href="/logout">Logout</a>
+                    <a  href="/logout">Logout</a>
                 </li>
             </ul>
         
@@ -42,8 +48,8 @@
 
             <ul class="uk-navbar-nav">
             
-                <li><a style="text-transform: none !important" href="/register">Register</a></li>
-                <li><a style="text-transform: none !important" href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Login</a></li>
             </ul>
 
         </div>
