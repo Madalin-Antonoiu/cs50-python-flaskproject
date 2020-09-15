@@ -6,6 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
+
 from helpers import *
 
 # configure application
@@ -41,17 +42,17 @@ def register():
         # check username
         if not request.form.get('username'):
             status = False
-            return apology("You must provide an username")
+            return apology("You must provide an username", 403, "register.html")
 
         # check password
         if not request.form.get('password'):
             status = False
-            return apology("You must provide a password")
+            return apology("You must provide a password", 403, "register.html")
 
         # check password confirmation
         if not request.form.get('password') == request.form.get('confirm_password'):
             status = False
-            return apology("Password confirmation not match")
+            return apology("Password confirmation not match", 403, "register.html")
 
         # check unique username
         exists_username= db.execute("SELECT username FROM users where username = :username", username = username)

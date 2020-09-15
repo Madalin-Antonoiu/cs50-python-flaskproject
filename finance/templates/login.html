@@ -1,13 +1,5 @@
 {% extends "layout.html" %}
 
-{% block head %} 
-<style type="text/css">
-    h3 { color: #336699 !important; }
-    #errors {color: red;}
-</style>
-{% endblock %}
-
-
 {% block body %}
 
     <form action="/login" method="POST" class="uk-position-large  uk-margin-xlarge-top uk-position-top-center" >
@@ -15,14 +7,14 @@
         <div class="uk-margin">
             <div class="uk-inline">
                 <span class="uk-form-icon" uk-icon="icon: user"></span>
-                <input name="username" class="uk-input" type="text" placeholder="Username" >
+                <input name="username" class="uk-input" type="text" placeholder="Username" required>
             </div>
         </div>
 
         <div class="uk-margin">
             <div class="uk-inline">
                 <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                <input name="password" class="uk-input"  type="password" placeholder="Password" >
+                <input name="password" class="uk-input"  type="password" placeholder="Password" required>
             </div>
         </div>
 
@@ -31,11 +23,6 @@
         </div>
 
     </form>
-
-    <div id="errors" class="uk-position-large uk-position-center">
-        {{ code}} - {{ message}}
-    </div>
-    
 
     <div class="uk-position-bottom-center uk-position-large">
         {%if rows%}
@@ -49,5 +36,6 @@
         {%endif%}
     </div>
 
+{% include 'errors.html' %}
 
 {% endblock %}
