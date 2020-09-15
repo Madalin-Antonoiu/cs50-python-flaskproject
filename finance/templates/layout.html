@@ -13,6 +13,12 @@
     <title>{% block title %}{% endblock %} - Financer</title>
 
     {% block style %}{% endblock %}
+
+    <style>
+        .uk-notification-top-center{
+            margin-top: 75px !important;
+        }   
+    </style>
 </head>
 <body>
 
@@ -21,6 +27,25 @@
     <div class="uk-card uk-card-default uk-card-body uk-position-center">
         {% block body %}
         {% endblock %}
+    </div>
+
+    <div >
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+            <script>
+                UIkit.notification({message: `{{ message[1] }}`, status: `{{ message[0] }}`, pos: 'top-center' })
+                // Explanation:
+                // with_categories=true gives me back an object with 2 entries:
+                // message[0] - the category passed to flash
+                // message[1] - the actual message
+                // flash("Failed!", "warning") aka flash(message[1], message[0]) 
+                // message[0] must include Notification status codes from UiKit
+            </script>
+                
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
     </div>
 
     {% if message%}

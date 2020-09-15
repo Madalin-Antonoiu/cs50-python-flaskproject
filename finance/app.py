@@ -63,7 +63,9 @@ def register():
 
             # Remember which user has logged in
             session["user_id"] = register
-         
+            session["username"] = username
+
+            flash("You are now registered.", "success")
             # Redirect user to home page
             return redirect("/")
 
@@ -76,7 +78,6 @@ def login():
     """Log user in"""
 
     # Forget any user_id
-    session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -92,22 +93,28 @@ def login():
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
-
+      
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            flash('Invalid username and/or password', "danger")
             return apology("Invalid username and/or password", 403, "login.html")
 
+        
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
         session["username"] = rows[0]["username"]
+        
 
         # Redirect user to home page
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        rows = db.execute("SELECT * from users;")
-        return render_template("login.html", rows=rows)
+        if "user_id" in session:
+            flash('Already logged in, redirecting to home page.', "success")
+            return redirect("/")
+
+        return render_template("login.html")
 
 @app.route("/logout")
 def logout():
@@ -115,4 +122,5 @@ def logout():
 
     # Forget any user_id
     session.clear()
+    flash("Successfully logged out.", "success")
     return redirect("/")
