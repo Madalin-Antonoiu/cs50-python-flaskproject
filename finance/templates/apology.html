@@ -1,13 +1,8 @@
 {% extends "layout.html" %}
 
+{% block title %} Error {% endblock %}
+
+
 {% block body %}
-
-    <h1>Sorry!</h1>
-
-    <div>
-        {{ message }}
-    </div>
-
-    <a href="/">Go back</a>
-
+  <h2 class="uk-position-large  uk-margin-xlarge-top uk-position-top-center">Error {{ code }} - {{ message }}</h2>
 {% endblock %}
