@@ -1,37 +1,52 @@
 {% extends "layout.html" %}
 
+{% block head %} 
+<style type="text/css">
+    h3 { color: #336699 !important; }
+    #errors {color: red;}
+</style>
+{% endblock %}
+
+
 {% block body %}
 
-    <form class="uk-position-large  uk-margin-xlarge-top uk-position-top-center">
+    <form action="/login" method="POST" class="uk-position-large  uk-margin-xlarge-top uk-position-top-center" >
 
         <div class="uk-margin">
             <div class="uk-inline">
                 <span class="uk-form-icon" uk-icon="icon: user"></span>
-                <input class="uk-input" type="text" placeholder="Username">
+                <input name="username" class="uk-input" type="text" placeholder="Username" >
             </div>
         </div>
 
         <div class="uk-margin">
             <div class="uk-inline">
                 <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                <input class="uk-input" type="text" placeholder="Password">
+                <input name="password" class="uk-input"  type="password" placeholder="Password" >
             </div>
         </div>
 
         <div class="uk-margin" uk-margin>
-            <button class="uk-button uk-button-default uk-align-center uk-button-primary">Login</button>
+            <button type="submit" class="uk-button uk-button-default uk-align-center uk-button-primary">Login</button>
         </div>
 
     </form>
 
+    <div id="errors" class="uk-position-large uk-position-center">
+        {{ code}} - {{ message}}
+    </div>
+    
+
     <div class="uk-position-bottom-center uk-position-large">
-        <h3>Registered users:</h3>
-        <ul>
-            {% for row in rows %}
-                <li>{{ row }}</li> 
-                <!-- <li>{{ row["username"]}} - {{ row["email"]}} - </li> -->
-            {% endfor %}
-        </ul>
+        {%if rows%}
+            <h3>Registered users:</h3>
+            <ul>
+                {% for row in rows %}
+                    <li>{{ row }}</li> 
+                    <!-- <li>{{ row["username"]}} - {{ row["email"]}} - </li> -->
+                {% endfor %}
+            </ul>
+        {%endif%}
     </div>
 
 

@@ -24,11 +24,11 @@ Session(app)
 #     raise RuntimeError("API_KEY not set.")
 
 @app.route("/")
-# @login_required
+@login_required
 def index():
-    return apology("TODO", 202)
+    # return apology("TODO", 202)
     """Show portfolio of stocks"""
-    # return render_template("/index.html")
+    return render_template("/index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -42,6 +42,11 @@ def register():
         if not request.form.get('username'):
             status = False
             return apology("You must provide an username")
+
+        # check password
+        if not request.form.get('password'):
+            status = False
+            return apology("You must provide a password")
 
         # check password confirmation
         if not request.form.get('password') == request.form.get('confirm_password'):
@@ -65,7 +70,6 @@ def register():
             # Redirect user to home page
             return redirect("/")
 
-        
         # return render_template('register.html', status = status, text = text)
     else:
         return render_template('register.html')
@@ -76,29 +80,25 @@ def login():
 
     # Forget any user_id
     session.clear()
-    rows = db.execute("SELECT * from users;")
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        rows = db.execute("SELECT * from users;") # Troubleshooting registered users, can be removed
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("Must provide username" , 403, "login.html") #rows can be removed from apology
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
-
-        # Ensure email was submitted
-        elif not request.form.get("email"):
-            return apology("must provide email", 403)
+            return apology("must provide password",  403, "login.html")
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("Invalid username and/or password", 403, "login.html")
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -108,4 +108,5 @@ def login():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
+        rows = db.execute("SELECT * from users;")
         return render_template("login.html", rows=rows)

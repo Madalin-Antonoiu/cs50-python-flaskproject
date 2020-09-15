@@ -9,7 +9,7 @@ from cs50 import SQL
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 
-def apology(message, code=400):
+def apology(message, code=400, page="apology.html"):
     """Render message as an apology to user."""
     def escape(s):
         """
@@ -20,7 +20,7 @@ def apology(message, code=400):
                          ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
             s = s.replace(old, new)
         return s
-    return render_template("apology.html", message=escape(message), code=code)
+    return render_template(template_name_or_list=page, message=escape(message), code=code)
 
 
 def login_required(f):
