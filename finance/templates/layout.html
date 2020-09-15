@@ -19,9 +19,13 @@
 
     {% include 'navbar.html' %}
 
-    {% block body %}
-    {% endblock %}
+    <div class="uk-card uk-card-default uk-card-body uk-position-center">
+        {% block body %}
+        {% endblock %}
+    </div>
 
-    {% include 'errors.html' %}
+    {% if message%}
+        {% include 'errors.html' %}
+    {% endif %}
 </body>
 </html>

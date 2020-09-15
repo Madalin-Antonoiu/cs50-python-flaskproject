@@ -1,20 +1,53 @@
 <nav class="uk-navbar-container" uk-navbar>
 
-    <div class="uk-navbar-left">
+    {% if session.user_id %}
 
-        <a class="uk-navbar-item uk-logo" href="/">Financer</a>
+        <div class="uk-navbar-left uk-margin-xlarge-left">
+            <a class="uk-navbar-item uk-logo" href="/">Financer</a>
 
-    </div>
+            <ul class="uk-navbar-nav">
+                <li><a style="text-transform: none !important" href="/quote">Quote</a></li>
+                <li><a style="text-transform: none !important" href="/buy">Buy</a></li>
+                <li><a style="text-transform: none !important" href="/sell">Sell</a></li>
+                <li><a style="text-transform: none !important" href="/history">History</a></li>
+            </ul>
 
-    <div class="uk-navbar-right">
+        </div>
 
-        <ul class="uk-navbar-nav">
-            <!-- <div class="uk-navbar-item"></div> -->
-            <li><a style="text-transform: none !important" href="/register">Register</a></li>
-            <li><a style="text-transform: none !important" href="/login">Login</a></li>
-        </ul>
-     
+        <div class="uk-navbar-right uk-margin-xlarge-right">
 
-    </div>
+            <ul class="uk-navbar-nav">
+                <li> 
+                    <a href="/user" style="text-transform: none !important">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
+                        {{ session["username"] }}
+                    </a>
+                </li>
+
+                <li>
+                    <a  style="text-transform: none !important" href="/logout">Logout</a>
+                </li>
+            </ul>
+        
+
+        </div>
+
+    {% else %}
+
+        <div class="uk-navbar-left uk-margin-xlarge-left">
+            <a class="uk-navbar-item uk-logo" href="/">Financer</a>
+        </div>
+ 
+        <div class="uk-navbar-right uk-margin-xlarge-right">
+
+            <ul class="uk-navbar-nav">
+            
+                <li><a style="text-transform: none !important" href="/register">Register</a></li>
+                <li><a style="text-transform: none !important" href="/login">Login</a></li>
+            </ul>
+
+        </div>
+
+    {% endif %}
 
 </nav>

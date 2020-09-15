@@ -5,15 +5,10 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-
-
-from helpers import *
+from helpers import login_required, apology
 
 # configure application
 app = Flask(__name__)
-
-# The Model - Connect to database 
-db = SQL("sqlite:///finance.db")
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
@@ -21,8 +16,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# if not os.environ.get("API_KEY"):
-#     raise RuntimeError("API_KEY not set.")
+# The Model - Connect to database 
+db = SQL("sqlite:///finance.db")
+
 
 @app.route("/")
 @login_required
@@ -67,7 +63,7 @@ def register():
 
             # Remember which user has logged in
             session["user_id"] = register
-
+         
             # Redirect user to home page
             return redirect("/")
 
@@ -103,6 +99,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["username"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -111,3 +108,11 @@ def login():
     else:
         rows = db.execute("SELECT * from users;")
         return render_template("login.html", rows=rows)
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+    return redirect("/")

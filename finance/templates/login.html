@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 
+{% block title %} Log In {% endblock %} 
+
 {% block body %}
 
-    <form action="/login" method="POST" class="uk-position-large  uk-margin-xlarge-top uk-position-top-center" >
+    <form action="/login" method="POST">
 
         <div class="uk-margin">
             <div class="uk-inline">
@@ -24,16 +26,13 @@
 
     </form>
 
-    <div class="uk-position-bottom-center uk-position-large">
-        {%if rows%}
-            <h3>Registered users:</h3>
-            <ul>
-                {% for row in rows %}
-                    <li>{{ row }}</li> 
-                    <!-- <li>{{ row["username"]}} - {{ row["email"]}} - </li> -->
-                {% endfor %}
-            </ul>
-        {%endif%}
-    </div>
-
+    <!-- {%if rows%}
+        <h3>Registered users:</h3>
+        <ul>
+            {% for row in rows %}
+                <li>{{ row }}</li> 
+            {% endfor %}
+        </ul>
+    {%endif%} -->
+    
 {% endblock %}
