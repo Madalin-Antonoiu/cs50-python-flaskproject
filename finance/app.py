@@ -96,7 +96,6 @@ def login():
       
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            flash('Invalid username and/or password', "danger")
             return apology("Invalid username and/or password", 403, "login.html")
 
         
@@ -104,14 +103,14 @@ def login():
         session["user_id"] = rows[0]["id"]
         session["username"] = rows[0]["username"]
         
-
+        flash('Successfully logged in.', "success")
         # Redirect user to home page
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         if "user_id" in session:
-            flash('Already logged in, redirecting to home page.', "success")
+            flash('Already logged in, redirected to home page.', "success")
             return redirect("/")
 
         return render_template("login.html")

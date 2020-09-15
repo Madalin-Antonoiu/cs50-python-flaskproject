@@ -4,7 +4,7 @@
 </style>
 {% endblock %}
 
-<nav class="uk-navbar-container" uk-navbar>
+<nav class="uk-navbar-container uk-margin" uk-navbar="mode: click">
 
     {% if session.user_id %}
 
@@ -14,10 +14,21 @@
             <a class="uk-navbar-item uk-logo" href="/">Financer</a>
 
             <ul class="uk-navbar-nav">
-                <li><a href="/quote">Quote</a></li>
-                <li><a href="/buy">Buy</a></li>
-                <li><a href="/sell">Sell</a></li>
-                <li><a href="/history">History</a></li>
+                <li class="uk-active">
+                    <a href="#">Portfolio</a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li><a href="/quote">Quote</a></li>
+                            <li><a href="/buy">Buy</a></li>
+                            <li><a href="/sell">Sell</a></li>
+                            <li><a href="/history">History</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="uk-navbar-nav">
+
             </ul>
 
         </div>
@@ -33,7 +44,11 @@
                 </li>
 
                 <li>
-                    <a  href="/logout">Logout</a>
+                    <a href="/logout">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: sign-out"></span>
+                        Logout
+                    </a>
+
                 </li>
             </ul>
         
@@ -50,8 +65,19 @@
 
             <ul class="uk-navbar-nav">
             
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
+                <li>
+                    <a href="/register">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: world"></span>
+                        <span>Register</span>  
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/login">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: sign-in"></span>
+                        <span>Login</span> 
+                    </a>
+                </li>
             </ul>
 
         </div>
@@ -64,4 +90,12 @@
 
 
 
+</nav>
+
+<nav class="uk-navbar-container uk-margin" uk-navbar="mode: click">
+    <div class="uk-navbar-left">
+
+
+
+    </div>
 </nav>

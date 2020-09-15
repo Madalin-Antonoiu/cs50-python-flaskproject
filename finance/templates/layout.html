@@ -34,7 +34,7 @@
         {% if messages %}
             {% for message in messages %}
             <script>
-                UIkit.notification({message: `{{ message[1] }}`, status: `{{ message[0] }}`, pos: 'top-center' })
+                UIkit.notification({message: `{{ message[1] }}`, status: `{{ message[0] }}`, pos: 'top-center', timeout: 2000 })
                 // Explanation:
                 // with_categories=true gives me back an object with 2 entries:
                 // message[0] - the category passed to flash
