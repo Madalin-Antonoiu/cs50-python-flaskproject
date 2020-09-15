@@ -8,6 +8,8 @@
 
     {% if session.user_id %}
 
+        {% include 'utils/account_settings.html' %}
+
         <div class="uk-navbar-left uk-margin-xlarge-left">
             <a class="uk-navbar-item uk-logo" href="/">Financer</a>
 
@@ -23,7 +25,7 @@
         <div class="uk-navbar-right uk-margin-xlarge-right">
 
             <ul class="uk-navbar-nav">
-                <li> 
+                <li uk-toggle="target: #modal-close-default"> 
                     <a href="/user">
                         <span class="uk-icon uk-margin-small-right" uk-icon="icon: user"></span>
                         {{ session["username"] }}
@@ -55,5 +57,11 @@
         </div>
 
     {% endif %}
+
+
+
+    <!-- This is a button toggling the modal with the default close button -->
+
+
 
 </nav>

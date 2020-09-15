@@ -1,0 +1,19 @@
+<!-- This is the modal with the default close button -->
+<div id="modal-close-default" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Account Settings</h2>
+
+        <h3>Account Details:</h3>
+        <p>Username: <b>{{ session["username"] }}</b></p>
+
+        <h3>Change Password:</h3>
+
+        <form action="" method="post">
+            <input name="curr_pw" type="text" placeholder="Current Password"> <br>
+            <input name="new_pw" type="text" placeholder="New Password"><br>
+            <input name="conf_pw" type="text" placeholder="Confirm Password"><br>
+            <button name="submit" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
