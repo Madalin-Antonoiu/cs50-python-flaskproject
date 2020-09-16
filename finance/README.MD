@@ -8,3 +8,5 @@ Create the database:
 ## Getting back to this project:
 `cd venv/Scripts/ && . activate && cd .. && cd .. && cd finance && export FLASK_APP=app.py && export FLASK_ENV=development && flask run
 `
+
+cd venv/Scripts/ && . activate && cd .. && cd .. && cd finance && set FLASK_APP=app.py && set FLASK_ENV=development && flask run

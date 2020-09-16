@@ -18,16 +18,19 @@
         .uk-notification-top-center{
             margin-top: 75px !important;
         }   
+        .mt-50{
+            margin-top: -50px;
+        }
     </style>
 </head>
 <body>
 
     {% include 'navbar.html' %}
 
-    <div class="uk-card uk-card-default uk-card-body uk-position-center">
-        {% block body %}
-        {% endblock %}
-    </div>
+   
+    {% block body %}
+    {% endblock %}
+
 
     <div >
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -51,5 +54,7 @@
     {% if message%}
         {% include 'errors.html' %}
     {% endif %}
+
+    {% block js %}{% endblock %}
 </body>
 </html>

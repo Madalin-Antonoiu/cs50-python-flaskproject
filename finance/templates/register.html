@@ -3,43 +3,43 @@
 {% block title %} Register {% endblock %} 
 
 {% block body %}
+<div class=" uk-position-center">
+    <form action="/register" method="POST" >
 
-<form action="/register" method="POST" >
+        <!-- <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                <input name="email" class="uk-input" type="email" placeholder="Email">
+            </div>
+        </div> -->
 
-    <!-- <div class="uk-margin">
-        <div class="uk-inline">
-            <span class="uk-form-icon" uk-icon="icon: mail"></span>
-            <input name="email" class="uk-input" type="email" placeholder="Email">
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                <input name="username" class="uk-input" type="text" placeholder="Username" required>
+            </div>
         </div>
-    </div> -->
 
-    <div class="uk-margin">
-        <div class="uk-inline">
-            <span class="uk-form-icon" uk-icon="icon: user"></span>
-            <input name="username" class="uk-input" type="text" placeholder="Username" required>
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                <input name="password" class="uk-input" type="password" placeholder="Password" required>
+            </div>
         </div>
-    </div>
 
-    <div class="uk-margin">
-        <div class="uk-inline">
-            <span class="uk-form-icon" uk-icon="icon: lock"></span>
-            <input name="password" class="uk-input" type="password" placeholder="Password" required>
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                <input name="confirm_password" class="uk-input" type="password" placeholder="Confirm Password" required>
+            </div>
         </div>
-    </div>
 
-    <div class="uk-margin">
-        <div class="uk-inline">
-            <span class="uk-form-icon" uk-icon="icon: lock"></span>
-            <input name="confirm_password" class="uk-input" type="password" placeholder="Confirm Password" required>
+        <div class="uk-margin" uk-margin>
+            <button id="submit" type="submit" class="uk-button uk-button-default uk-align-center uk-button-primary">Register</button>
         </div>
-    </div>
 
-    <div class="uk-margin" uk-margin>
-        <button id="submit" type="submit" class="uk-button uk-button-default uk-align-center uk-button-primary">Register</button>
-    </div>
-
-</form>
-
+    </form>
+</div>
 
 
 {% endblock %}

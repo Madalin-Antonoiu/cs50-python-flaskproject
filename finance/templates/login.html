@@ -3,7 +3,7 @@
 {% block title %} Log In {% endblock %} 
 
 {% block body %}
-
+<div class=" uk-position-center">
     <form action="/login" method="POST">
 
         <div class="uk-margin">
@@ -25,14 +25,7 @@
         </div>
 
     </form>
+</div>
 
-    <!-- {%if rows%}
-        <h3>Registered users:</h3>
-        <ul>
-            {% for row in rows %}
-                <li>{{ row }}</li> 
-            {% endfor %}
-        </ul>
-    {%endif%} -->
     
 {% endblock %}

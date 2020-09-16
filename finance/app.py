@@ -1,11 +1,11 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for, request
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-from helpers import login_required, apology
+from helpers import login_required, apology, lookup, usd
 
 # configure application
 app = Flask(__name__)
@@ -18,6 +18,20 @@ Session(app)
 
 # The Model - Connect to database 
 db = SQL("sqlite:///finance.db")
+
+
+# Make sure API key is set
+if not os.environ.get("API_KEY"):
+    # os.environ["API_KEY"] = "KEY"
+    raise RuntimeError("API_KEY not set")
+
+# Ensure responses aren't cached
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 
 @app.route("/")
@@ -123,3 +137,27 @@ def logout():
     session.clear()
     flash("Successfully logged out.", "success")
     return redirect("/")
+
+@app.route("/quote", methods=["GET", "POST"])
+@login_required
+def quote():
+    """Lookup for symbol"""
+    if request.method == "POST":
+        if not request.form.get("symbol"):
+            return apology("Must provide a symbol e.g TSLA" , 403, "quote.html") 
+        
+        symbol = request.form.get('symbol')
+        quote = lookup(symbol)
+
+        if not quote:
+            return apology("Not found.", 403, "quote.html")
+
+        return render_template('quote.html', quote = quote)
+
+        # return apology("Work in Progress" , 201, "quote.html") 
+    else:
+        # """Get stock quote."""
+        return render_template("quote.html")
+        
+
+

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %} Quote {% endblock %} 
+
+{% block body %}
+
+
+  <div class="mt-50 uk-card uk-card-default uk-card-body uk-position-center">
+
+      <form id="lookup" action="/quote" method="POST">
+
+          <div class="uk-margin">
+              <div class="uk-inline">
+                  <span class="uk-form-icon" uk-icon="icon: world"></span>
+                  <input name="symbol" class="uk-input" type="text" placeholder="Symbol" >
+              </div>
+          </div>
+
+          <div class="uk-margin" uk-margin>
+              <button id="search" type="submit" class="uk-button uk-button-default uk-align-center uk-button-primary">Search</button>
+          </div>
+
+      </form>
+
+      {% if quote %}
+      <div id="quote-view" class="">
+        <p style="text-align: center;vertical-align: middle;">
+          <span style="font-weight: bold;">{{quote.symbol}}</span>, 
+          <span style="font-weight: bold; color:green">{{quote.price}}$</span>, 
+          <span style="font-weight: bold;">{{quote.name}} </span>
+         </p>
+      </div>
+      {% endif %}
+
+  </div>
+
+
+
+
+
+    
+{% endblock %}
+
