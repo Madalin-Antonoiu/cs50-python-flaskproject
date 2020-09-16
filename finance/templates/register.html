@@ -2,44 +2,58 @@
 
 {% block title %} Register {% endblock %} 
 
+
 {% block body %}
-<div class=" uk-position-center">
-    <form action="/register" method="POST" >
+<section class="hero is-medium is-info">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            
+            <form action="/register" method="POST" class="box">
 
-        <!-- <div class="uk-margin">
-            <div class="uk-inline">
-                <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                <input name="email" class="uk-input" type="email" placeholder="Email">
-            </div>
-        </div> -->
+              <div class="field">
+                <label for="" class="label">Username</label>
+                <div class="control has-icons-left">
+                  <input name="username" type="text" placeholder="bobsmith123" class="input" required>
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-user"></i>
+                  </span>
+                </div>
+              </div>
 
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <span class="uk-form-icon" uk-icon="icon: user"></span>
-                <input name="username" class="uk-input" type="text" placeholder="Username" required>
-            </div>
+              <div class="field">
+                <label for="" class="label">Password</label>
+                <div class="control has-icons-left">
+                  <input name="password" type="password" placeholder="*******" class="input" required>
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="" class="label">Confirm Password</label>
+                <div class="control has-icons-left">
+                  <input name="confirm_password" type="password" placeholder="*******" class="input" required>
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field">
+                <button type="submit" class="button is-success">
+                  Register
+                </button>
+              </div>
+
+            </form>
+          </div>
         </div>
+      </div>
+    </div>
+</section>
 
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                <input name="password" class="uk-input" type="password" placeholder="Password" required>
-            </div>
-        </div>
-
-        <div class="uk-margin">
-            <div class="uk-inline">
-                <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                <input name="confirm_password" class="uk-input" type="password" placeholder="Confirm Password" required>
-            </div>
-        </div>
-
-        <div class="uk-margin" uk-margin>
-            <button id="submit" type="submit" class="uk-button uk-button-default uk-align-center uk-button-primary">Register</button>
-        </div>
-
-    </form>
-</div>
-
-
+    
 {% endblock %}

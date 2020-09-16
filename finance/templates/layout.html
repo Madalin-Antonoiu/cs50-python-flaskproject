@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/css/uikit.min.css" />
+    <!-- Bulma -->
+    <link rel="stylesheet" type="text/css" href="../static/css/bulma.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
 
-    <!-- UIkit JS -->
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/js/uikit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.7/dist/js/uikit-icons.min.js"></script>
-
-    <title>{% block title %}{% endblock %} - Financer</title>
+    <title>{% block title %}{% endblock %} - Stockfin</title>
 
     {% block style %}{% endblock %}
 
     <style>
-        .uk-notification-top-center{
-            margin-top: 75px !important;
-        }   
-        .mt-50{
-            margin-top: -50px;
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .footer {
+            padding: 1.2rem;
+            /* background-color: red; */
+
+        }
+        .hero.is-fullheight-with-navbar {
+            min-height: calc(100vh - 3.25rem - 4.15rem);
+            /* 24px - 1.5 rem is the footer text */
+            /* 3.25 rem is navbar, 4.5rem is footer*/
         }
     </style>
 </head>
 <body>
 
-    {% include 'navbar.html' %}
+    {% include 'includes/navbar.html' %}
 
+    {% if message%}
+        {% include 'errors.html' %}
+    {% endif %}
    
     {% block body %}
     {% endblock %}
@@ -51,9 +60,10 @@
         {% endwith %}
     </div>
 
-    {% if message%}
-        {% include 'errors.html' %}
-    {% endif %}
+
+
+
+    {% include 'includes/footer.html' %}
 
     {% block js %}{% endblock %}
 </body>

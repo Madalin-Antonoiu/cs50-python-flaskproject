@@ -1,0 +1,136 @@
+{% block style %} 
+<style type="text/css">
+    /* ul li a {text-transform: none !important} */
+    .logo{
+      font-size: 150%;
+      color: inherit;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+<nav class="navbar is-fixed" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+
+      <a class="navbar-item logo" href="/">
+        Stockfin
+      </a>
+  
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    {% if session.user_id %}
+  
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+
+        <a href="/quote" class="navbar-item">
+          Quote
+        </a>
+        <a href="/buy" class="navbar-item">
+          Buy
+        </a>
+        <a href="/sell" class="navbar-item">
+          Sell
+        </a>
+        <a href="/history" class="navbar-item">
+          History
+        </a>
+
+      </div>
+  
+      <div class="navbar-end">
+
+        <div class="navbar-item">
+          <a id="showModal" href="#">
+          
+            <span class="icon is-small is-left">
+              <i class="fa fa-user"></i>
+            </span>
+  
+            <span>{{ session["username"] }}</span>
+          </a>
+        </div>
+     
+        <div class="navbar-item">
+          <div class="buttons">
+            <a href="/logout" class="button is-light">
+              Log Out
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {% else %}
+    <!-- Not logged in -->
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a href="/register" class="button is-primary">
+              <strong>Sign up</strong>
+            </a>
+            <a href="/login" class="button is-light">
+              Log in
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    {% endif %}
+</nav>
+
+{% include 'utils/account_settings.html' %}
+
+{% block js %}
+<script type="text/javascript">
+
+    // Navbar
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("Working.")
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+    
+        // Add a click event on each of them
+        $navbarBurgers.forEach( el => {
+            el.addEventListener('click', () => {
+    
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+    
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+    
+            });
+        });
+        }
+    });
+
+    // Modal
+    var btn = document.querySelector('#showModal');
+    var modalDlg = document.querySelector('#image-modal');
+    var imageModalCloseBtn = document.querySelector('#image-modal-close');
+    btn.addEventListener('click', function(){
+      modalDlg.classList.add('is-active');
+    });
+
+    imageModalCloseBtn.addEventListener('click', function(){
+      modalDlg.classList.remove('is-active');
+    });
+</script>
+{% endblock %}
+
