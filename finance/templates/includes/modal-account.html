@@ -1,0 +1,55 @@
+<div class="container" id="app">
+    <div id="image-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+       <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Account Details</p>
+      </header>
+      <section class="modal-card-body">
+        <!-- Content ... -->
+        <p>Username: <b>{{ session["username"] }}</b></p>
+        <p>Balance: <b>{{ session["balance"] }}</b></p>
+
+        <h2>Change Password:</h2>
+
+        <form action="" method="post">
+            <input name="curr_pw" type="text" placeholder="Current Password"> <br>
+            <input name="new_pw" type="text" placeholder="New Password"><br>
+            <input name="conf_pw" type="text" placeholder="Confirm Password"><br>
+            <button name="submit" type="submit">Submit</button>
+        </form>
+
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" id="image-modal-close" >Close</button>
+      </footer>
+    </div>
+      </div>
+      <button id="image-modal-close" class="modal-close"></button>
+    </div>
+
+  </div>
+  {% block js %}
+  <script type="text/javascript">
+    // Modal
+    var btn = document.querySelector('#showModal');
+    var modalDlg = document.querySelector('#image-modal');
+    var imageModalCloseBtn = document.querySelectorAll('#image-modal-close');
+
+    btn.addEventListener('click', function(){
+      modalDlg.classList.add('is-active');
+    });
+
+    imageModalCloseBtn.forEach(element => console.log(element));
+
+    // for (let i=0; i < imageModalCloseBtn.length; i++) {
+    //   imageModalCloseBtn[i].addEventListener('click', function(){
+    //     modalDlg.classList.remove('is-active');
+    //   });
+    // }
+
+  </script>
+  {% endblock %}
+
+

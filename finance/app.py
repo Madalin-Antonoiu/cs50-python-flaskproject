@@ -1,4 +1,6 @@
 import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for, request
@@ -7,8 +9,12 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import login_required, apology, lookup, usd
 
-# configure application
+# Configure application
 app = Flask(__name__)
+
+# .env setup for the API
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
@@ -22,7 +28,6 @@ db = SQL("sqlite:///finance.db")
 
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
-    # os.environ["API_KEY"] = "KEY"
     raise RuntimeError("API_KEY not set")
 
 # Ensure responses aren't cached

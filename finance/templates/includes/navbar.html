@@ -47,7 +47,7 @@
       <div class="navbar-end">
 
         <div class="navbar-item">
-          <a id="showModal" href="#">
+          <a id="showModal" href="">
           
             <span class="icon is-small is-left">
               <i class="fa fa-user"></i>
@@ -89,7 +89,7 @@
     {% endif %}
 </nav>
 
-{% include 'utils/account_settings.html' %}
+{% include 'includes/modal-account.html' %}
 
 {% block js %}
 <script type="text/javascript">
@@ -120,17 +120,6 @@
         }
     });
 
-    // Modal
-    var btn = document.querySelector('#showModal');
-    var modalDlg = document.querySelector('#image-modal');
-    var imageModalCloseBtn = document.querySelector('#image-modal-close');
-    btn.addEventListener('click', function(){
-      modalDlg.classList.add('is-active');
-    });
-
-    imageModalCloseBtn.addEventListener('click', function(){
-      modalDlg.classList.remove('is-active');
-    });
 </script>
 {% endblock %}
 
