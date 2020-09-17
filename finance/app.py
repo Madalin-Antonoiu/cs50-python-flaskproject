@@ -44,7 +44,9 @@ def after_request(response):
 def index():
     # return apology("TODO", 202)
     """Show portfolio of stocks"""
-    return render_template("/index.html")
+    rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+    currency = rows[0]["currency"]
+    return render_template("/index.html", currency=currency)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
