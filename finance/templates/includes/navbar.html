@@ -7,10 +7,16 @@
       vertical-align: middle;
       font-weight: bold;
     }
+    #showModal{
+      color: inherit;
+    }
+    #showModal:hover{
+      color: burlywood;
+    }
 </style>
 {% endblock %}
 
-<nav class="navbar is-fixed" role="navigation" aria-label="main navigation">
+<nav class="navbar is-fixed is-info" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
 
       <a class="navbar-item logo" href="/">
@@ -46,14 +52,14 @@
   
       <div class="navbar-end">
 
-        <div class="navbar-item">
-          <a id="showModal" href="#">
+        <div class="navbar-item is-dark">
+          <a id="showModal" href="#" >
           
             <span class="icon is-small is-left">
               <i class="fa fa-user"></i>
             </span>
   
-            <span>{{ session["username"] }}</span>
+            <span >{{ session["username"] }}</span>
           </a>
         </div>
      

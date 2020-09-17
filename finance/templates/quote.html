@@ -16,7 +16,7 @@
 
 
     <div class="container mt-6 fixed-height">
-        <div class="notification mt-6">
+        <div class="notification mt-6 is-info">
 
             <form id="lookup" action="/quote" method="POST">
 
@@ -42,7 +42,7 @@
 
     <div class="container">
         {% if quote %}
-        <div class="notification">
+        <div class="notification is-dark">
 
             
             <div id="quote-view" class="">
@@ -50,7 +50,7 @@
             A share of 
                 <span style="font-weight: bold;">{{quote.symbol}}</span>, 
                 <span style="font-weight: bold;">{{quote.name}}, </span>costs
-                <span style="font-weight: bold; color:green">{{quote.price}}$</span>. 
+                <span style="font-weight: bold; color:green">{{quote.price}}$</span> 
         
             </p>
             </div>
