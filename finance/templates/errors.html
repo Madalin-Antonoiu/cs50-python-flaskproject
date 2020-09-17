@@ -1,8 +1,29 @@
 
-<div class="notification is-danger  mb-0">
+
+{% block style %} 
+<style type="text/css">
+  .animateOpen{
+    animation:moveOpen 5s;
+    animation-iteration-count:initial;
+    animation-fill-mode: forwards;
+  }
+ 
+  @keyframes moveOpen 
+    {
+    from {-webkit-transform: translate(0, -4.5rem);}
+    25% {-webkit-transform: translate(0, 0);}
+    80% {-webkit-transform: translate(0, 0);}
+    100% {-webkit-transform: translate(0, 0);}
+    to {-webkit-transform: translate(0, -4.5rem);}
+  }
+</style>
+{% endblock %}
+
+
+
+<div id="notify" class="notification is-danger mb-0">
     <button class="delete"></button>
     <p class="has-text-centered">{{ code}} - {{ message}}</p>
-    
 </div>
 
 {% block js %}
@@ -11,7 +32,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
       $notification = $delete.parentNode;
-  
+
+      document.querySelector("#notify").classList.add("animateOpen"); // Add animation to it
+      
+      setTimeout( function() {
+        $notification.parentNode.removeChild($notification);
+      }, 5000);
+
       $delete.addEventListener('click', () => {
         $notification.parentNode.removeChild($notification);
       });

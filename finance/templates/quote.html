@@ -2,37 +2,63 @@
 
 {% block title %} Quote {% endblock %} 
 
+{% block style %} 
+<style type="text/css">
+    /* ul li a {text-transform: none !important} */
+    .fixed-height{
+        max-height: 9.5rem;
+    }
+</style>
+{% endblock %}
+
+
 {% block body %}
 
 
-  <div class="mt-50 uk-card uk-card-default uk-card-body uk-position-center">
+    <div class="container mt-6 fixed-height">
+        <div class="notification mt-6">
 
-      <form id="lookup" action="/quote" method="POST">
+            <form id="lookup" action="/quote" method="POST">
 
-          <div class="uk-margin">
-              <div class="uk-inline">
-                  <span class="uk-form-icon" uk-icon="icon: world"></span>
-                  <input name="symbol" class="uk-input" type="text" placeholder="Symbol" >
-              </div>
-          </div>
+                <div class="field is-grouped">
+                    <p class="control is-expanded">
+                    <input name="symbol" class="input" type="text" placeholder="Lookup symbol e.g. TSLA">
+                    </p>
+                    <p class="control">
+                        <button id="search" type="submit" class="button is-primary">Search</button>
+                    </p>
+                </div>
+            
+            
+            </form>
+            
+            
 
-          <div class="uk-margin" uk-margin>
-              <button id="search" type="submit" class="uk-button uk-button-default uk-align-center uk-button-primary">Search</button>
-          </div>
+        </div>
 
-      </form>
+       
 
-      {% if quote %}
-      <div id="quote-view" class="">
-        <p style="text-align: center;vertical-align: middle;">
-          <span style="font-weight: bold;">{{quote.symbol}}</span>, 
-          <span style="font-weight: bold; color:green">{{quote.price}}$</span>, 
-          <span style="font-weight: bold;">{{quote.name}} </span>
-         </p>
-      </div>
-      {% endif %}
+    </div>
 
-  </div>
+    <div class="container">
+        {% if quote %}
+        <div class="notification">
+
+            
+            <div id="quote-view" class="">
+            <p style="text-align: center;vertical-align: middle;">
+            A share of 
+                <span style="font-weight: bold;">{{quote.symbol}}</span>, 
+                <span style="font-weight: bold;">{{quote.name}}, </span>costs
+                <span style="font-weight: bold; color:green">{{quote.price}}$</span>. 
+        
+            </p>
+            </div>
+           
+        </div>
+        {% endif %}
+    </div>
+
 
 
 
