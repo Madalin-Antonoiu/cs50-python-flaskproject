@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %} Buy {% endblock %} 
+
+{% block style %} 
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+
+    <div class="container mt-6">
+        <div class="notification mt-6 is-info">
+
+            <form id="buy" action="/buy" method="POST">
+
+                <div class="field is-grouped">
+                    <p class="control is-expanded">
+                        <input name="symbol" class="input" type="text" placeholder="Symbol">
+                    </p>
+                    <p class="control is-expanded">
+                        <input name="shares" class="input" type="number" placeholder="Shares">
+                    </p>
+                    <p class="control">
+                        <button id="search" type="submit" class="button is-primary">Buy</button>
+                    </p>
+                </div>
+            
+            
+            </form>
+            
+            
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+

@@ -1,0 +1,43 @@
+{% block style %} 
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  
+  {% for category, message in messages %}
+    <div id="notify" class="notification is-{{category}} mb-0">
+        
+        <button class="delete"></button>
+        <p class="has-text-centered noti"> {{ message}}</p>
+        
+    </div>
+    {% endfor %}
+
+  {% endif %}
+{% endwith %}
+
+
+{% block js %}
+<script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', () => {
+    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+      $notification = $delete.parentNode;
+
+      setTimeout( function() {
+        $notification.parentNode.removeChild($notification);
+      }, 15000);
+
+      $delete.addEventListener('click', () => {
+        $notification.parentNode.removeChild($notification);
+      });
+    });
+  });
+  
+</script>
+{% endblock %}
+
+

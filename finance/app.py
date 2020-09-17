@@ -166,5 +166,34 @@ def quote():
         # """Get stock quote."""
         return render_template("quote.html")
         
+@app.route("/buy", methods=["GET", "POST"])
+@login_required
+def buy():
+    if request.method == "POST":
 
+        symbol = request.form.get('symbol')
+        
+        if not request.form.get("symbol"):
+            return apology("Must provide a symbol e.g TSLA" , 403, "buy.html") 
+        
+        shares = request.form.get('shares')
 
+        if not request.form.get("shares"):
+            return apology("Must provide a share count" , 403, "buy.html") 
+        
+        quote = lookup(symbol)
+
+        if not quote:
+            return apology("Symbol not valid.", 403, "buy.html")
+        
+        # check if enough cash left
+        #create history entry and remove cash
+
+        flash("Successfully bought" + " " + shares + "x shares" + " of" + " " + quote["symbol"] + " at" + " " + str(quote["price"]) + " each !" , "success"  )
+        return redirect('/')
+
+        # return apology("Work in Progress" , 201, "quote.html") 
+    else:
+        # """Get stock quote."""
+        return render_template("/buy.html")
+    

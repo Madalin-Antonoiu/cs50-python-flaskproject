@@ -36,8 +36,11 @@
 
     {% include 'includes/navbar.html' %}
 
+    {% include 'flash.html' %}
+    
+
     <div style="position: absolute; top:3.5rem; width: 100%;">
-        {% if message%}
+        {% if message %}
             {% include 'errors.html' %}
         {% endif %}
     </div>
