@@ -46,7 +46,10 @@ def index():
     """Show portfolio of stocks"""
     rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
     currency = rows[0]["currency"]
-    return render_template("/index.html", currency=currency)
+
+    history = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
+
+    return render_template("/index.html", currency=currency, history=history)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -189,7 +192,7 @@ def buy():
         # check if enough cash left
         #create history entry and remove cash
 
-        flash("Successfully bought" + " " + shares + "x shares" + " of" + " " + quote["symbol"] + " at" + " " + str(quote["price"]) + " each !" , "success"  )
+        flash("Successfully MOCKED" + " " + shares + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each !" , "success"  )
         return redirect('/')
 
         # return apology("Work in Progress" , 201, "quote.html") 

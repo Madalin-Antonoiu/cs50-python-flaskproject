@@ -13,11 +13,22 @@
             <th>Symbol</th>
             <th>Names</th>
             <th>Shares</th>
-            <th>Price</th>
+            <th>Current Value</th>
             <th>TOTAL</th>
           </tr>
         </thead>
         <tbody>
+          {% if history %}
+            {% for history in history %}
+              <tr>
+                <td>{{ history.symbol }}</td>
+                <td>{{ history.company }}</td>
+                <td>{{ history.shares }}</td>
+                <td></td>
+                <td> {{ history.price_paid }}</td>    
+              </tr>
+            {% endfor %}
+          {% endif %}
           <tr>
             <td>CASH</td>
             <td></td>
