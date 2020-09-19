@@ -5,27 +5,27 @@
 
 {% block body %}
 
-<div class="container is-fluid">
+<div class="container is-fullhd mt-6 pt-6">
     <div class="notification">
       <table class="table is-striped is-hoverable is-fullwidth">
         <thead>
           <tr>
             <th>Symbol</th>
-            <th>Names</th>
+            <th>Company</th>
             <th>Shares</th>
             <th>Current Value</th>
             <th>TOTAL</th>
           </tr>
         </thead>
         <tbody>
-          {% if history %}
-            {% for history in history %}
+          {% if current_holding %}
+            {% for data in current_holding %}
               <tr>
-                <td>{{ history.symbol }}</td>
-                <td>{{ history.company }}</td>
-                <td>{{ history.shares }}</td>
+                <td>{{ data.symbol }}</td>
+                <td>{{ data.company }}</td>
+                <td>{{ data.shares }}</td>
                 <td></td>
-                <td> {{ history.price_paid }}</td>    
+                <td> </td>    
               </tr>
             {% endfor %}
           {% endif %}
@@ -34,14 +34,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>${{ currency }}.00 </td>    
+            <td>${{ currency }} </td>    
           </tr>
           <tr>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td><b>${{ currency }}.00</b> </td>    
+            <td><b>${{ currency }}</b> </td>    
           </tr>
 
         </tbody>

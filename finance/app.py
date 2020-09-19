@@ -1,9 +1,11 @@
 import os
+from datetime import datetime
+
 from os.path import join, dirname
 from dotenv import load_dotenv
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for, request
+from flask import Flask, flash, redirect, render_template, request, session, url_for, request, g
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -30,6 +32,7 @@ db = SQL("sqlite:///finance.db")
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
+
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
@@ -47,9 +50,9 @@ def index():
     rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
     currency = rows[0]["currency"]
 
-    history = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
+    current_holding = db.execute("SELECT * FROM :user_table", user_table=session["username"])
 
-    return render_template("/index.html", currency=currency, history=history)
+    return render_template("/index.html", currency=currency, current_holding=current_holding)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -101,8 +104,6 @@ def register():
 def login():
     """Log user in"""
 
-    # Forget any user_id
-
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         rows = db.execute("SELECT * from users;") # Troubleshooting registered users, can be removed
@@ -145,6 +146,7 @@ def logout():
 
     # Forget any user_id
     session.clear()
+
     flash("Successfully logged out.", "success")
     return redirect("/")
 
@@ -174,12 +176,16 @@ def quote():
 def buy():
     if request.method == "POST":
 
+        # Get the time of the request in dt_string
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+
         symbol = request.form.get('symbol')
         
         if not request.form.get("symbol"):
             return apology("Must provide a symbol e.g TSLA" , 403, "buy.html") 
         
-        shares = request.form.get('shares')
+        shares = int(request.form.get('shares'))
 
         if not request.form.get("shares"):
             return apology("Must provide a share count" , 403, "buy.html") 
@@ -192,8 +198,95 @@ def buy():
         # check if enough cash left
         #create history entry and remove cash
 
-        flash("Successfully MOCKED" + " " + shares + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each !" , "success"  )
-        return redirect('/')
+        # Get the active currency
+        rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+        session["currency"] = rows[0]["currency"]
+
+        # if positive
+        if session["currency"] > 0:
+            #move on, cut the price from it
+            # calculate the price of what you want to buy, see if it`s lower than your session currency
+            session["purchase_total"] =  quote["price"] * shares
+
+            # if active currency is bigger than purchase_total
+
+            if session["currency"] > session["purchase_total"]:
+
+                #update the users table and insert the symbol and shares
+
+                # SELECT symbol row from table
+                rows = db.execute("SELECT * FROM :table WHERE symbol = :symbol ", table=session["username"], symbol=symbol)
+
+                # if found same symbol in retrieved data from user's table, update shares count
+                if rows:
+
+                    # I moved it here because i dont want to take money away if an error happen with the shares
+                    # calculate remaining currency and update  currency in db 
+                    session["updated_currency"] = session["currency"] - session["purchase_total"]
+                    UPDATE_CURRENCY = db.execute("UPDATE users SET currency = :updated_currency WHERE id = :id", updated_currency=session["updated_currency"], id=session["user_id"])
+
+                    count = rows[0]["shares"] + shares
+                    #update shares
+                    UPDATE_SHARES = db.execute("UPDATE :user_table SET shares = :count WHERE symbol = :symbol", user_table=session["username"], count=count, symbol=symbol)
+
+                    # And write to history too!
+                    UPDATE_HISTORY = db.execute("""
+                                        INSERT INTO history (id, username, symbol, company, shares, price_paid, currency_before, currency_after, purchased_on) 
+                                        VALUES(:id, :username, :symbol, :company, :shares, :price_paid, :currency_before, :currency_after, :purchased_on)
+                                        """, 
+                                        id =session["user_id"], 
+                                        username=session["username"], 
+                                        symbol=symbol, company=quote["name"], 
+                                        shares=shares, 
+                                        price_paid=session["purchase_total"], 
+                                        currency_before=session["currency"], 
+                                        currency_after=session["updated_currency"], 
+                                        purchased_on=dt_string)
+
+                    # Congratulate message and redirect to index
+                    flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ( TOTAL :" + str(session["purchase_total"]) + ", REMAINING:" + str(session["updated_currency"]) + " )" , "success"  )
+                    return redirect('/')
+
+                else:
+                    # I moved it here because i dont want to take money away if an error happen with the shares
+                    # calculate remaining currency and update  currency in db 
+                    session["updated_currency"] = session["currency"] - session["purchase_total"]
+                    UPDATE_CURRENCY = db.execute("UPDATE users SET currency = :updated_currency WHERE id = :id", updated_currency=session["updated_currency"], id=session["user_id"])
+
+
+                    #update shares, insert shares
+                    UPDATE_SHARES = db.execute("""
+                                    INSERT INTO :user_table (symbol, company, shares)
+                                    VALUES (:symbol, :company, :shares)
+                                    """, user_table=session["username"], symbol=symbol, company=quote["name"], shares=shares)
+
+                                            # And write to history too!
+                    UPDATE_HISTORY = db.execute("""
+                                        INSERT INTO history (id, username, symbol, company, shares, price_paid, currency_before, currency_after, purchased_on) 
+                                        VALUES(:id, :username, :symbol, :company, :shares, :price_paid, :currency_before, :currency_after, :purchased_on)
+                                        """, 
+                                        id =session["user_id"], 
+                                        username=session["username"], 
+                                        symbol=symbol, company=quote["name"], 
+                                        shares=shares, 
+                                        price_paid=session["purchase_total"], 
+                                        currency_before=session["currency"], 
+                                        currency_after=session["updated_currency"], 
+                                        purchased_on=dt_string)
+
+                    # Congratulate message and redirect to index
+                    flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ( TOTAL :" + str(session["purchase_total"]) + ", REMAINING:" + str(session["updated_currency"]) + " )" , "success"  )
+                    return redirect('/')
+
+            else:
+                return apology("Insufficient funds", 403, "buy.html")
+            
+        else:
+            return apology("Insufficient funds", 403, "buy.html")
+        
+
+
+
 
         # return apology("Work in Progress" , 201, "quote.html") 
     else:
