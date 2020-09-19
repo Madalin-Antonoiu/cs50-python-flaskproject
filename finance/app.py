@@ -185,7 +185,10 @@ def buy():
         if not request.form.get("symbol"):
             return apology("Must provide a symbol e.g TSLA" , 403, "buy.html") 
         
-        shares = int(request.form.get('shares'))
+        # Make sure it is integer, and always positive (abs)
+        # I also forbid negative value in front end
+        # If by any means it gets negative, it does the reverse ( SELL!)
+        shares = abs(int(request.form.get('shares'))) 
 
         if not request.form.get("shares"):
             return apology("Must provide a share count" , 403, "buy.html") 
@@ -206,7 +209,7 @@ def buy():
         if session["currency"] > 0:
             #move on, cut the price from it
             # calculate the price of what you want to buy, see if it`s lower than your session currency
-            session["purchase_total"] =  quote["price"] * shares
+            session["purchase_total"] =  round(quote["price"] * shares, 2)
 
             # if active currency is bigger than purchase_total
 
@@ -222,7 +225,8 @@ def buy():
 
                     # I moved it here because i dont want to take money away if an error happen with the shares
                     # calculate remaining currency and update  currency in db 
-                    session["updated_currency"] = session["currency"] - session["purchase_total"]
+   
+                    session["updated_currency"] = round(session["currency"] - session["purchase_total"], 2)
                     UPDATE_CURRENCY = db.execute("UPDATE users SET currency = :updated_currency WHERE id = :id", updated_currency=session["updated_currency"], id=session["user_id"])
 
                     count = rows[0]["shares"] + shares
@@ -250,7 +254,7 @@ def buy():
                 else:
                     # I moved it here because i dont want to take money away if an error happen with the shares
                     # calculate remaining currency and update  currency in db 
-                    session["updated_currency"] = session["currency"] - session["purchase_total"]
+                    session["updated_currency"] = round(session["currency"] - session["purchase_total"], 2)
                     UPDATE_CURRENCY = db.execute("UPDATE users SET currency = :updated_currency WHERE id = :id", updated_currency=session["updated_currency"], id=session["user_id"])
 
 
@@ -292,4 +296,10 @@ def buy():
     else:
         # """Get stock quote."""
         return render_template("/buy.html")
-    
+
+
+@app.route("/history")
+@login_required
+def history():
+    rows = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
+    return render_template("/history.html", rows=rows)

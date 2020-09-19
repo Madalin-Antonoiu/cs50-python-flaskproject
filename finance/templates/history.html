@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %} History {% endblock %} 
+
+
+{% block body %}
+
+<div class="container is-striped mt-6 pt-6">
+    <div class="notification">
+    {% if rows %}
+      <table class="table is-striped is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Company</th>
+            <th>Shares</th>
+            <th>PPS</th>
+            <th>TOTAL</th>
+            <th>Transacted</th>
+          </tr>
+        </thead>
+        <tbody>
+         
+            {% for data in rows %}
+              <tr>
+                <td>{{ data.symbol }}</td>
+                <td>{{ data.company }}</td>
+                <td>
+                
+                        {% if data.shares < 0 %}
+                            <span style="color: red">{{data.shares}}</span>
+                        {% else %}
+                        <span >{{data.shares}}</span>
+                        {% endif %}
+                   
+                </td>
+                <td>${{ (data.price_paid / data.shares)|round(2)  }}</td>
+                <td>
+                    
+                        {% if data.price_paid < 0 %}
+                        <span style="color: green">${{data.price_paid * -1}}</span>
+                            
+                        {% else %}
+                        <span style="color: red">-${{data.price_paid}}</span>
+                        {% endif %}
+                    
+                </td>
+                <td>{{ data.purchased_on }} </td>    
+              </tr>
+            {% endfor %}
+
+
+        </tbody>
+      </table>
+    {%else%}
+
+    <h1>There are no transactions yet!</h1>
+    
+    {% endif %}
+          
+    </div>
+</div>
+
+
+{% endblock %}

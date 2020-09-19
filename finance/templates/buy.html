@@ -22,7 +22,10 @@
                         <input name="symbol" class="input" type="text" placeholder="Symbol">
                     </p>
                     <p class="control is-expanded">
-                        <input name="shares" class="input" type="number" placeholder="Shares">
+                        <input name="shares" class="input" type="number" min="1" max="1000000" 
+                            oninput="validity.valid||(value='')"; 
+                            placeholder="Shares"
+                        >
                     </p>
                     <p class="control">
                         <button id="search" type="submit" class="button is-primary">Buy</button>
