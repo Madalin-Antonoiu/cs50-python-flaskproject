@@ -9,7 +9,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-from helpers import login_required, apology, lookup, usd
+from helpers import login_required, apology, lookup
 
 # Configure application
 app = Flask(__name__)
@@ -27,11 +27,9 @@ Session(app)
 # The Model - Connect to database 
 db = SQL("sqlite:///finance.db")
 
-
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
-
 
 # Ensure responses aren't cached
 @app.after_request
@@ -41,18 +39,28 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
 @app.route("/")
 @login_required
 def index():
-    # return apology("TODO", 202)
+    # SELECT currency would be better
     """Show portfolio of stocks"""
+    final_quotes = []
+
     rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
     currency = rows[0]["currency"]
+    
+    user_table = db.execute("SELECT symbol, shares, company FROM :username", username=session["username"]) #If i query only symbol, they return alphabetically ordered
+    
+    for row in user_table:
+      quote = lookup(row["symbol"]) # do these in deffered JavaScript ajax, like this it takes too long (2-3 sec) and for no good reason!
+      # + Add shares
+      quote["shares"] = row["shares"]
+      quote["total"] = round(quote["shares"] * quote["price"],2)
+      final_quotes.append(quote)
 
-    current_holding = db.execute("SELECT * FROM :user_table", user_table=session["username"])
+    # json_object = multiple_lookup_from_db(session["username"])
 
-    return render_template("/index.html", currency=currency, current_holding=current_holding)
+    return render_template("/index.html", currency=currency, final_quotes=final_quotes)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -296,7 +304,6 @@ def buy():
     else:
         # """Get stock quote."""
         return render_template("/buy.html")
-
 
 @app.route("/history")
 @login_required

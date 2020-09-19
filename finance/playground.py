@@ -1,0 +1,25 @@
+# EG 1.
+link = "batch?symbols="
+symbols = []
+rows = [{'symbol': 'TSLA'},{'symbol': 'AAPL'}, {'symbol': 'IBM'}] # i get returned back always in Db order, so that is good
+for item in rows:
+    symbols.append(item["symbol"])
+    link = link +  item["symbol"] + ","
+print(link)
+print(symbols)
+# good -  symbols.append(item["symbol"])
+#EG 2
+quote = {
+        'IBM': {'quote': {'symbol': 'IBM', 'companyName': 'International Business Machines Corp.', 'primaryExchange': 'New York Stock Exchange', 'calculationPrice': 'close', 'open': 124.26, 'openTime': 1600435801180, 'openSource': 'official', 'close': 122.76, 'closeTime': 1600459202419, 'closeSource': 'official', 'high': 124.92, 'highTime': 1600473529416, 'highSource': '15 minute delayed price', 'low': 122.65, 'lowTime': 1600458761151, 'lowSource': '15 minute delayed price', 'latestPrice': 122.76, 'latestSource': 'Close', 'latestTime': 'September 18, 2020', 'latestUpdate': 1600459202419, 'latestVolume': 5391570, 'iexRealtimePrice': None, 'iexRealtimeSize': None, 'iexLastUpdated': None, 'delayedPrice': 122.75, 'delayedPriceTime': 1600473529416, 'oddLotDelayedPrice': 122.77, 'oddLotDelayedPriceTime': 1600459200000, 'extendedPrice': 122.75, 'extendedChange': -0.01, 'extendedChangePercent': -8e-05, 'extendedPriceTime': 1600473529416, 'previousClose': 124.92, 'previousVolume': 3171262, 'change': -2.16, 'changePercent': -0.01729, 'volume': 5391570, 'iexMarketPercent': None, 'iexVolume': None, 'avgTotalVolume': 3896882, 'iexBidPrice': None, 'iexBidSize': None, 'iexAskPrice': None, 'iexAskSize': None, 'iexOpen': None, 'iexOpenTime': None, 'iexClose': 122.79, 'iexCloseTime': 1600459197334, 'marketCap': 109327478040, 'peRatio': 13.83, 'week52High': 158.75, 'week52Low': 90.56, 'ytdChange': -0.094827, 'lastTradeTime': 1600459202372, 'isUSMarketOpen': False}}, 
+        'TSLA': {'quote': {'symbol': 'TSLA', 'companyName': 'Tesla, Inc.', 'primaryExchange': 'NASDAQ', 'calculationPrice': 'close', 'open': 448.74, 'openTime': 1600435801474, 'openSource': 'official', 'close': 442.15, 'closeTime': 1600459201295, 'closeSource': 'official', 'high': 451, 'highTime': 1600473598753, 'highSource': '15 minute delayed price', 'low': 428.8, 'lowTime': 1600450332287, 'lowSource': '15 minute delayed price', 'latestPrice': 442.15, 'latestSource': 'Close', 'latestTime': 'September 18, 2020', 'latestUpdate': 1600459201295, 'latestVolume': 86406819, 'iexRealtimePrice': None, 'iexRealtimeSize': None, 'iexLastUpdated': None, 'delayedPrice': 449.5, 'delayedPriceTime': 1600473598753, 'oddLotDelayedPrice': 444.89, 'oddLotDelayedPriceTime': 1600462307929, 'extendedPrice': 449.37, 'extendedChange': 7.22, 'extendedChangePercent': 0.01633, 'extendedPriceTime': 1600473598350, 'previousClose': 423.43, 'previousVolume': 76779163, 'change': 18.72, 'changePercent': 0.04421, 'volume': 86406819, 'iexMarketPercent': None, 'iexVolume': None, 'avgTotalVolume': 85258282, 'iexBidPrice': None, 'iexBidSize': None, 'iexAskPrice': None, 'iexAskSize': None, 'iexOpen': None, 'iexOpenTime': None, 'iexClose': 441.69, 'iexCloseTime': 1600459196105, 'marketCap': 411999349350, 'peRatio': 1089.58, 'week52High': 502.49, 'week52Low': 43.67, 'ytdChange': 3.964839, 'lastTradeTime': 1600459201103, 'isUSMarketOpen': False}},
+        'AAPL': {'quote': {'symbol': 'AAPL', 'companyName': 'Apple, Inc.', 'primaryExchange': 'NASDAQ', 'calculationPrice': 'close', 'open': 110.41, 'openTime': 1600435801331, 'openSource': 'official', 'close': 106.84, 'closeTime': 1600459201291, 'closeSource': 'official', 'high': 110.88, 'highTime': 1600473599055, 'highSource': '15 minute delayed price', 'low': 106.09, 'lowTime': 1600450273472, 'lowSource': '15 minute delayed price', 'latestPrice': 106.84, 'latestSource': 'Close', 'latestTime': 'September 18, 2020', 'latestUpdate': 1600459201291, 'latestVolume': 287104882, 'iexRealtimePrice': None, 'iexRealtimeSize': None, 'iexLastUpdated': None, 'delayedPrice': 106.93, 'delayedPriceTime': 1600473599055, 'oddLotDelayedPrice': 127.67, 'oddLotDelayedPriceTime': 1600462729838, 'extendedPrice': 106.93, 'extendedChange': 0.09, 'extendedChangePercent': 0.00084, 'extendedPriceTime': 1600473599055, 'previousClose': 110.34, 'previousVolume': 178010968, 'change': -3.5, 'changePercent': -0.03172, 'volume': 287104882, 'iexMarketPercent': None, 'iexVolume': None, 'avgTotalVolume': 197471715, 'iexBidPrice': None, 'iexBidSize': None, 'iexAskPrice': None, 'iexAskSize': None, 'iexOpen': None, 'iexOpenTime': None, 'iexClose': 106.86, 'iexCloseTime': 1600459196732, 'marketCap': 1852317132000, 'peRatio': 32.2, 'week52High': 137.98, 'week52Low': 53.15, 'ytdChange': 0.437766, 'lastTradeTime': 1600459204365, 'isUSMarketOpen': False}} 
+        }
+
+for symbol in symbols:
+    print(quote[symbol]["quote"]["companyName"])
+
+# print(type(quote))
+# good, now how do i parse this?
+# print(quote[]["quote"]["companyName"])
+
+                

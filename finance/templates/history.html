@@ -28,7 +28,7 @@
                 <td>
                 
                         {% if data.shares < 0 %}
-                            <span style="color: red">{{data.shares}}</span>
+                            <span>{{data.shares}}</span>
                         {% else %}
                         <span >{{data.shares}}</span>
                         {% endif %}
@@ -41,7 +41,7 @@
                         <span style="color: green">${{data.price_paid * -1}}</span>
                             
                         {% else %}
-                        <span style="color: red">-${{data.price_paid}}</span>
+                        <span style="color: tomato">-${{data.price_paid}}</span>
                         {% endif %}
                     
                 </td>
