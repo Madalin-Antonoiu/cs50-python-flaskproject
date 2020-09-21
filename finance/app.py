@@ -9,6 +9,15 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import login_required, apology, lookup
+from password_strength import PasswordPolicy
+
+policy = PasswordPolicy.from_names(
+    length=8,  # min length: 8
+    uppercase=1,  # need min. 2 uppercase letters
+    numbers=1,  # need min. 2 digits
+    special=1,  # need min. 2 special characters
+    nonletters=1,  # need min. 2 non-letter characters (digits, specials, anything)
+)
 
 # Configure application
 app = Flask(__name__)
@@ -68,6 +77,11 @@ def register():
         """Register user"""
         username = request.form.get('username')
         password = generate_password_hash(request.form.get('password'))
+        password_test = policy.test(request.form.get('password'))
+        
+        if password_test:
+            return apology("Your password does not meet the cryteria:  Length:8, Uppercase:1, Numbers:1, Special:1 ")
+
         status = True
         
         # check username
@@ -397,6 +411,12 @@ def update_password():
 
         typed_password = request.form.get('current_password')
         new_password = generate_password_hash(request.form.get('new_password'))
+
+        password_test = policy.test(request.form.get('new_password'))
+        
+        if password_test:
+            return apology("Your new password does not meet the cryteria:  Length:8, Uppercase:1, Numbers:1, Special:1 ")
+
 
         if not request.form.get("current_password"):
             return apology("You have not typed in your current password") 
