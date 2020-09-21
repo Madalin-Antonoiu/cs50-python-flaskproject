@@ -74,7 +74,8 @@ def register():
         # check username
         if not request.form.get('username'):
             status = False
-            return apology("You must provide an username", 403, "register.html")
+            flash("You must provide an username", "danger")
+            return redirect("/register")
 
         # check password
         if not request.form.get('password'):
@@ -244,17 +245,17 @@ def buy():
 
                     # And write to history too!
                     UPDATE_HISTORY = db.execute("""
-                                        INSERT INTO history (id, username, symbol, company, shares, price_paid, currency_before, currency_after, purchased_on) 
-                                        VALUES(:id, :username, :symbol, :company, :shares, :price_paid, :currency_before, :currency_after, :purchased_on)
+                                        INSERT INTO history (id, username, symbol, company, shares, price, currency_before, currency_after, transacted) 
+                                        VALUES(:id, :username, :symbol, :company, :shares, :price, :currency_before, :currency_after, :transacted)
                                         """, 
                                         id =session["user_id"], 
                                         username=session["username"], 
                                         symbol=symbol, company=quote["name"], 
                                         shares=shares, 
-                                        price_paid=session["purchase_total"], 
+                                        price=session["purchase_total"], 
                                         currency_before=session["currency"], 
                                         currency_after=session["updated_currency"], 
-                                        purchased_on=dt_string)
+                                        transacted=dt_string)
 
                     # Congratulate message and redirect to index
                     flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ( TOTAL :" + str(session["purchase_total"]) + ", REMAINING:" + str(session["updated_currency"]) + " )" , "success"  )
@@ -275,17 +276,17 @@ def buy():
 
                                             # And write to history too!
                     UPDATE_HISTORY = db.execute("""
-                                        INSERT INTO history (id, username, symbol, company, shares, price_paid, currency_before, currency_after, purchased_on) 
-                                        VALUES(:id, :username, :symbol, :company, :shares, :price_paid, :currency_before, :currency_after, :purchased_on)
+                                        INSERT INTO history (id, username, symbol, company, shares, price, currency_before, currency_after, transacted) 
+                                        VALUES(:id, :username, :symbol, :company, :shares, :price, :currency_before, :currency_after, :transacted)
                                         """, 
                                         id =session["user_id"], 
                                         username=session["username"], 
                                         symbol=symbol, company=quote["name"], 
                                         shares=shares, 
-                                        price_paid=session["purchase_total"], 
+                                        price=session["purchase_total"], 
                                         currency_before=session["currency"], 
                                         currency_after=session["updated_currency"], 
-                                        purchased_on=dt_string)
+                                        transacted=dt_string)
 
                     # Congratulate message and redirect to index
                     flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ( TOTAL :" + str(session["purchase_total"]) + ", REMAINING:" + str(session["updated_currency"]) + " )" , "success"  )
@@ -311,3 +312,78 @@ def buy():
 def history():
     rows = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
     return render_template("/history.html", rows=rows)
+
+@app.route("/sell", methods=["GET", "POST"])
+@login_required
+def sell():
+    if request.method == "POST":
+
+        # Get the time of the request in dt_string
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+
+        symbol = request.form.get('symbol')
+        
+        if not request.form.get("symbol"):
+            return apology("Must provide a symbol e.g TSLA" , 403, "buy.html") 
+        
+        # If by any means it gets negative, it does the reverse ( SELL!)
+        shares = abs(int(request.form.get('shares'))) 
+
+        if not request.form.get("shares"):
+            return apology("Must provide a share count" , 403, "sell.html") 
+        
+        # Get the active symbols and shares max
+        rows = db.execute("SELECT * FROM :user_table", user_table=session["username"])
+
+        for row in rows:
+            # If we find the selected symbol in the database ( this is 2nd check, i already get these in GET)
+            if symbol == row["symbol"]:
+                # We are in the correct symbol row, so by calling row["shares"] we get that row's share count :)
+                if shares <= row["shares"]:
+                    # SELL THEM
+
+                    # 1. Get its most current price
+                    quote = lookup(row["symbol"])
+
+                    if not quote:
+                        return apology("Symbol not valid.", 403, "buy.html")
+                    
+                    #2. Substract the shares from total
+                    remaining_shares = row["shares"] - shares
+                    UPDATE_SHARES = db.execute("UPDATE :user_table SET shares = :count WHERE symbol = :symbol", user_table=session["username"], count=remaining_shares, symbol=symbol)
+                    # Toget rid of TSLA: 0 displays, i need to remove row from table when shares = row[shares], add an elif to this
+
+                    #3. Add the money to the balance ( Calculate total sale, then add it to currency)
+                    rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+                    currency_before = rows[0]["currency"]
+                    sale = round(shares * quote["price"], 2)
+                    total_currency = rows[0]["currency"] + sale
+                    UPDATE_CURRENCY = db.execute("UPDATE users SET currency = :total_currency WHERE id = :id", total_currency=total_currency, id=session["user_id"])
+
+                    #4. Add history record
+                    UPDATE_HISTORY = db.execute("""
+                                    INSERT INTO history (id, username, symbol, company, shares, price, currency_before, currency_after, transacted) 
+                                    VALUES(:id, :username, :symbol, :company, :shares, :price, :currency_before, :currency_after, :transacted)
+                                    """, 
+                                    id =session["user_id"], 
+                                    username=session["username"], 
+                                    symbol=symbol, 
+                                    company=quote["name"], 
+                                    shares=-shares, 
+                                    price=sale, 
+                                    currency_before=currency_before, 
+                                    currency_after=total_currency, 
+                                    transacted=dt_string)
+
+                    #Congratulate and redirect
+                    flash("You have sold " + str(shares) + " x " + symbol + "for " + " " + str(quote["price"]), "success")
+                    return redirect("/")
+                else:
+                    flash("You do not own that many shares to sell.", "danger")
+                    return redirect("/sell")
+
+    else:
+        """Get available symbols to pick from and their max share count currently owned from the user database"""
+        user_table = db.execute("SELECT symbol, shares FROM :username", username=session["username"]) #If i query only symbol, they return alphabetically ordered
+        return render_template("/sell.html", data=user_table)

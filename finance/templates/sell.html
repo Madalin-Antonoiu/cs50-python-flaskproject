@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %} Sell {% endblock %} 
+
+{% block style %} 
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+    {{ data}}
+    <div class="container mt-6">
+        <div class="notification mt-6 is-info">
+
+            <form id="buy" action="/sell" method="POST">
+
+                <div class="field is-grouped">
+
+                    <p class="control is-expanded ">
+                        <div class="select mr-3">
+                            <select name="symbol">
+                                {% if data %}
+                                    {% for option in data %}
+                                        <option>{{ option.symbol }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                          </div>
+                    </p>
+
+
+                    <p class="control is-expanded">
+
+                        <input name="shares" class="input" type="number" value="1" min="1" max="1000000" 
+                            oninput="validity.valid||(value='')"; 
+                            placeholder="Shares"
+                        >
+                    <!-- Max should be dynamic, coming from db current max stack of share -->
+                    </p>
+                    <p class="control">
+                        <button id="search" type="submit" class="button is-primary">Sell</button>
+                    </p>
+                </div>
+            
+            
+            </form>
+            
+            
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+

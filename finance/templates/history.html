@@ -34,18 +34,19 @@
                         {% endif %}
                    
                 </td>
-                <td>${{ (data.price_paid / data.shares)|round(2)  }}</td>
+                <td>${{ ((data.price / data.shares) *-1) |round(2)  }}</td>
                 <td>
                     
-                        {% if data.price_paid < 0 %}
-                        <span style="color: green">${{data.price_paid * -1}}</span>
-                            
+                        {% if data.shares < 0 %}
+                          <span style="color: green">${{data.price}}</span>
+                          
                         {% else %}
-                        <span style="color: tomato">-${{data.price_paid}}</span>
+                          <span style="color: tomato">-${{ data.price }}</span>
+                          
                         {% endif %}
                     
                 </td>
-                <td>{{ data.purchased_on }} </td>    
+                <td>{{ data.transacted }} </td>    
               </tr>
             {% endfor %}
 
