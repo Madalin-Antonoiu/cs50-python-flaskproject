@@ -53,6 +53,7 @@ def index():
     
     for row in user_table:
       quote = lookup(row["symbol"]) # do these in deffered JavaScript ajax, like this it takes too long (2-3 sec) and for no good reason!
+      
       # + Add shares
       quote["shares"] = row["shares"]
       quote["total"] = round(quote["shares"] * quote["price"],2)

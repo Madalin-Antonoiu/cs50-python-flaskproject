@@ -1,6 +1,6 @@
 {% block style %} 
 <style type="text/css">
-  #notify{
+  #notifyed{
     position: absolute;
     width:  100%;
     top: 3.5rem;
@@ -12,7 +12,7 @@
   {% if messages %}
 
   {% for category, message in messages %}
-    <div id="notify" class="notification is-{{category}} mb-0">
+    <div id="notifyed" class="notification is-{{category}} mb-0">
         
         <button class="delete"></button>
         <p class="has-text-centered noti"> {{ message}}</p>
