@@ -80,7 +80,7 @@ def register():
         password_test = policy.test(request.form.get('password'))
         
         if password_test:
-            return apology("Your password does not meet the cryteria:  Length:8, Uppercase:1, Numbers:1, Special:1 ")
+            return apology("Your password does not meet one of the following:  Length:8, Uppercase:1, Numbers:1, Special:1 ")
 
         status = True
         
@@ -415,7 +415,7 @@ def update_password():
         password_test = policy.test(request.form.get('new_password'))
         
         if password_test:
-            return apology("Your new password does not meet the cryteria:  Length:8, Uppercase:1, Numbers:1, Special:1 ")
+            return apology("Your new password does not meet one of the following:  Length:8, Uppercase:1, Numbers:1, Special:1 ")
 
         if not request.form.get("current_password"):
             return apology("You have not typed in your current password") 
@@ -439,6 +439,6 @@ def update_password():
 
         flash("Successfully changed your password.", "success")
         return redirect("/")
-        
+
     else:
         return render_template("update-password.html")
