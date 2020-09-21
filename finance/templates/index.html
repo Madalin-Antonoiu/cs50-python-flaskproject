@@ -5,135 +5,137 @@
 
 {% block body %}
 
+  <div class="container is-fullhd mt-6 pt-6">
+      <div class="notification">
+        {% if final_quotes %}
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Company</th>
+                <th>Shares</th>
+                <th>Current Value</th>
+                <th>TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Only Shares will be taken from  -->
+              
+                {% for data in final_quotes %}
 
-<div class="container is-fullhd mt-6 pt-6">
-    <div class="notification">
-      {% if final_quotes %}
-        <table class="table is-striped is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>Company</th>
-              <th>Shares</th>
-              <th>Current Value</th>
-              <th>TOTAL</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Only Shares will be taken from  -->
+                  <tr>
+                    <td>{{ data.symbol }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.shares }}</td>
+                    <td>${{ data.price }}</td>
+                    <td class="dtotal">${{ data.total }} </td>    
+                  </tr>
+                  
+                {% endfor %}
             
-              {% for data in final_quotes %}
+              <tr>
+                <td>CASH</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td id="cash" style="color: green">${{ currency }} </td>    
+              </tr>
 
-                <tr>
-                  <td>{{ data.symbol }}</td>
-                  <td>{{ data.name }}</td>
-                  <td>{{ data.shares }}</td>
-                  <td>${{ data.price }}</td>
-                  <td class="dtotal">${{ data.total }} </td>    
-                </tr>
-                
-              {% endfor %}
-          
-            <tr>
-              <td>CASH</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td id="cash" style="color: green">${{ currency }} </td>    
-            </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b id="put_here"></b> </td>    
+              </tr>
 
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><b id="put_here"></b> </td>    
-            </tr>
+            
+            </tbody>
+          </table>
+        {% else %}
+        
+          {% if code == True %}
+            <section class="hero is-primary">
+              <div class="hero-body">
+                <div class="container">
+                  <h1 class="title">
+                    Welcome to Stockfin!
+                  </h1>
+                  <h2 class="subtitle">
+                  You have received a $10000 (test) gift to invest in stock trading!
+                  </h2>
+                </div>
+              </div>
+            </section>
 
-          
-          </tbody>
-        </table>
-     {% else %}
-      
-     <section class="hero is-primary">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Welcome to Stockfin!
-          </h1>
-          <h2 class="subtitle">
-           You have received a $10000 (test) gift to invest in stock trading!
-          </h2>
-        </div>
+            <section class="hero is-dark">
+              <div class="hero-body">
+                <div class="container">
+                  <h2 class="subtitle">
+                    You can start quoting, buying and selling stocks from the menu.
+                  </h2>
+                </div>
+              </div>
+            </section>
+          {% endif %}
+
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Company</th>
+                <th>Shares</th>
+                <th>Current Value</th>
+                <th>TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CASH</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td id="cash" style="color: green">${{ currency }} </td>    
+              </tr>
+
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b id="put_here"></b> </td>    
+              </tr>
+
+            
+            </tbody>
+          </table>
+    {% endif %}
+
       </div>
-    </section>
+  </div>
 
-    <table class="table is-striped is-hoverable is-fullwidth">
-      <thead>
-        <tr>
-          <th>Symbol</th>
-          <th>Company</th>
-          <th>Shares</th>
-          <th>Current Value</th>
-          <th>TOTAL</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>CASH</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td id="cash" style="color: green">${{ currency }} </td>    
-        </tr>
+  <script type="text/javascript">
+  // Calculate total potential cash
+  document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
 
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><b id="put_here"></b> </td>    
-        </tr>
+    var dtotal = document.querySelectorAll(".dtotal");
+    var cash = document.querySelector("#cash").textContent.substring(1)
+    var fin = 0.00;
 
-      
-      </tbody>
-    </table>
+    for ( let i =0; i < dtotal.length; i++){
+      let value = parseFloat(dtotal[i].textContent.substring(1))
+      console.log(value);
+      fin += value;
+    }
+    console.log(fin);
 
-    <section class="hero is-dark">
-      <div class="hero-body">
-        <div class="container">
-          <h2 class="subtitle">
-            You can start quoting stocks by visiting the "Quote" section.
-          </h2>
-        </div>
-      </div>
-    </section>
-
-    {%endif%}
-    </div>
-</div>
-
-<script type="text/javascript">
-// Calculate total potential cash
-document.addEventListener('DOMContentLoaded', (event) => {
-  console.log('DOM fully loaded and parsed');
-
-  var dtotal = document.querySelectorAll(".dtotal");
-  var cash = document.querySelector("#cash").textContent.substring(1)
-  var fin = 0.00;
-
-  for ( let i =0; i < dtotal.length; i++){
-    let value = parseFloat(dtotal[i].textContent.substring(1))
-    console.log(value);
-    fin += value;
-  }
-  console.log(fin);
-
-  document.getElementById("put_here").innerText = "$"+ (fin+parseFloat(cash));
-});
+    document.getElementById("put_here").innerText = "$"+ (fin+parseFloat(cash));
+  });
 
 
 
 
-</script>
+  </script>
+
 {% endblock %}

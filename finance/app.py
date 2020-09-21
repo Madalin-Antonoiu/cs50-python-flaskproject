@@ -107,7 +107,7 @@ def register():
 
             flash("You are now registered.", "success")
             # Redirect user to home page
-            return redirect("/")
+            return render_template("index.html", code=True)
 
         # return render_template('register.html', status = status, text = text)
     else:
