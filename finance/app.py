@@ -325,7 +325,7 @@ def sell():
         symbol = request.form.get('symbol')
         
         if not request.form.get("symbol"):
-            return apology("Must provide a symbol e.g TSLA" , 403, "buy.html") 
+            return apology("Must provide a symbol e.g TSLA" , 403, "sell.html") 
         
         # If by any means it gets negative, it does the reverse ( SELL!)
         shares = abs(int(request.form.get('shares'))) 
@@ -347,18 +347,22 @@ def sell():
                     quote = lookup(row["symbol"])
 
                     if not quote:
-                        return apology("Symbol not valid.", 403, "buy.html")
+                        return apology("Symbol not valid.", 403, "sell.html")
                     
                     #2. Substract the shares from total
                     remaining_shares = row["shares"] - shares
+
+                    # Toget rid of TSLA: 0 displays, i need to remove row from table when shares = row[shares]
+                    if shares == row["shares"]:
+                        UPDATE_SHARES = db.execute("DELETE FROM :user_table WHERE symbol = :symbol", user_table=session["username"], symbol=symbol)
+                        
                     UPDATE_SHARES = db.execute("UPDATE :user_table SET shares = :count WHERE symbol = :symbol", user_table=session["username"], count=remaining_shares, symbol=symbol)
-                    # Toget rid of TSLA: 0 displays, i need to remove row from table when shares = row[shares], add an elif to this
 
                     #3. Add the money to the balance ( Calculate total sale, then add it to currency)
                     rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
                     currency_before = rows[0]["currency"]
                     sale = round(shares * quote["price"], 2)
-                    total_currency = rows[0]["currency"] + sale
+                    total_currency = round(rows[0]["currency"] + sale, 2)
                     UPDATE_CURRENCY = db.execute("UPDATE users SET currency = :total_currency WHERE id = :id", total_currency=total_currency, id=session["user_id"])
 
                     #4. Add history record
@@ -377,7 +381,7 @@ def sell():
                                     transacted=dt_string)
 
                     #Congratulate and redirect
-                    flash("You have sold " + str(shares) + " x " + symbol + "for " + " " + str(quote["price"]), "success")
+                    flash("You have sold " + str(shares) + " x " + symbol + " for " + " " + "$" +str(sale), "success")
                     return redirect("/")
                 else:
                     flash("You do not own that many shares to sell.", "danger")
