@@ -389,3 +389,36 @@ def sell():
 def history():
     rows = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
     return render_template("/history.html", rows=rows)
+
+@app.route("/update-password", methods=["GET","POST"])
+@login_required
+def update_password():
+    if request.method == "POST":
+
+        typed_password = request.form.get('current_password')
+        new_password = generate_password_hash(request.form.get('new_password'))
+
+        if not request.form.get("current_password"):
+            return apology("You have not typed in your current password") 
+        
+        if not request.form.get("new_password"):
+            return apology("You have not typed a new password") 
+
+        # check password confirmation
+        if not request.form.get('new_password') == request.form.get('confirm_password'):
+            return apology("Password confirmation not match")
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = :username", username=session["username"])
+      
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("current_password")):
+            return apology("Current password is not valid.")
+
+        # UPDATE THE Password field
+        UPDATE_PASSWORD = db.execute("UPDATE users SET hash = :new_password WHERE id = :id", new_password=new_password, id=session["user_id"])
+
+        flash("Successfully changed your password.", "success")
+        return redirect("/")
+    else:
+        return render_template("update-password.html")
