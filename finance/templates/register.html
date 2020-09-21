@@ -26,7 +26,7 @@
               <div class="field">
                 <label for="" class="label">Password</label>
                 <div class="control has-icons-left">
-                  <input name="password" type="password" placeholder="*******" class="input" >
+                  <input id="password_event" name="password" type="password" placeholder="*******" onfocus="function1()" onfocusout="function2()" class="input" >
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
@@ -36,7 +36,7 @@
               <div class="field">
                 <label for="" class="label">Confirm Password</label>
                 <div class="control has-icons-left">
-                  <input name="confirm_password" type="password" placeholder="*******" class="input" >
+                  <input name="confirm_password" type="password" placeholder="*******" class="input" onfocus="function1()" onfocusout="function2()">
                   <span class="icon is-small is-left">
                     <i class="fa fa-lock"></i>
                   </span>
@@ -52,11 +52,31 @@
               </div>
 
             </form>
+
+            <div class="columns is-centered ">
+              <h1 id="p_ver" class="is-hidden "> <span style="text-align: center;">Password Strength:</span> <br>
+                <span style="color:red"> * Minimum 8 characters, <br> * 1 Uppercase <br> * 1 Numeric <br> * 1 Special</span> 
+              </h1>
+            </div>
+
+
           </div>
         </div>
       </div>
     </div>
 </section>
-
     
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+
+ function function1(){
+  document.getElementById("p_ver").classList.remove("is-hidden");
+
+ }
+ function function2(){
+  document.getElementById("p_ver").classList.add("is-hidden");
+ }
+</script>
 {% endblock %}
