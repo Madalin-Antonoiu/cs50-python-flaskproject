@@ -8,53 +8,109 @@
 
 <div class="container is-fullhd mt-6 pt-6">
     <div class="notification">
-      <table class="table is-striped is-hoverable is-fullwidth">
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Company</th>
-            <th>Shares</th>
-            <th>Current Value</th>
-            <th>TOTAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Only Shares will be taken from  -->
-          {% if final_quotes %}
-            {% for data in final_quotes %}
+      {% if final_quotes %}
+        <table class="table is-striped is-hoverable is-fullwidth">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Company</th>
+              <th>Shares</th>
+              <th>Current Value</th>
+              <th>TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Only Shares will be taken from  -->
+            
+              {% for data in final_quotes %}
 
-              <tr>
-                <td>{{ data.symbol }}</td>
-                <td>{{ data.name }}</td>
-                <td>{{ data.shares }}</td>
-                <td>${{ data.price }}</td>
-                <td class="dtotal">${{ data.total }} </td>    
-              </tr>
-              
-            {% endfor %}
-        
-          <tr>
-            <td>CASH</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td id="cash" style="color: green">${{ currency }} </td>    
-          </tr>
-
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b id="put_here"></b> </td>    
-          </tr>
-
-          {%endif%}
-        </tbody>
-      </table>
-     
+                <tr>
+                  <td>{{ data.symbol }}</td>
+                  <td>{{ data.name }}</td>
+                  <td>{{ data.shares }}</td>
+                  <td>${{ data.price }}</td>
+                  <td class="dtotal">${{ data.total }} </td>    
+                </tr>
+                
+              {% endfor %}
           
+            <tr>
+              <td>CASH</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td id="cash" style="color: green">${{ currency }} </td>    
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><b id="put_here"></b> </td>    
+            </tr>
+
+          
+          </tbody>
+        </table>
+     {% else %}
+      
+     <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Welcome to Stockfin!
+          </h1>
+          <h2 class="subtitle">
+           You have received a $10000 (test) gift to invest in stock trading!
+          </h2>
         </div>
+      </div>
+    </section>
+
+    <table class="table is-striped is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Company</th>
+          <th>Shares</th>
+          <th>Current Value</th>
+          <th>TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CASH</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td id="cash" style="color: green">${{ currency }} </td>    
+        </tr>
+
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><b id="put_here"></b> </td>    
+        </tr>
+
+      
+      </tbody>
+    </table>
+
+    <section class="hero is-dark">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="subtitle">
+            You can start quoting stocks by visiting the "Quote" section.
+          </h2>
+        </div>
+      </div>
+    </section>
+
+    {%endif%}
+    </div>
 </div>
 
 <script type="text/javascript">

@@ -34,7 +34,7 @@
                         {% endif %}
                    
                 </td>
-                <td>${{ ((data.price / data.shares) *-1) |round(2)  }}</td>
+                <td>${{ ((data.price / data.shares)) |round(2)  }}</td>
                 <td>
                     
                         {% if data.shares < 0 %}

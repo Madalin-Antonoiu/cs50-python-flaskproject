@@ -4,25 +4,19 @@ import urllib.parse
 import datetime
 import json 
 
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 from functools import wraps
 from cs50 import SQL
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 
-def apology(message, code=400, page="apology.html"):
+
+def apology(message, category="danger"):
     """Render message as an apology to user."""
-    def escape(s):
-        """
-        Escape special characters.
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template(template_name_or_list=page, message=escape(message), code=code)
+    path = request.path
+    flash(message, category)
+    return render_template(template_name_or_list=path+".html")
 
 
 def login_required(f):

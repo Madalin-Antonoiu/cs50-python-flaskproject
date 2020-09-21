@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-
 from os.path import join, dirname
 from dotenv import load_dotenv
 
@@ -39,7 +38,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/")
+@app.route("/")#✔️
 @login_required
 def index():
     # SELECT currency would be better
@@ -63,7 +62,7 @@ def index():
 
     return render_template("/index.html", currency=currency, final_quotes=final_quotes)
 
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])#✔️
 def register():
     if request.method == 'POST':
         """Register user"""
@@ -74,24 +73,23 @@ def register():
         # check username
         if not request.form.get('username'):
             status = False
-            flash("You must provide an username", "danger")
-            return redirect("/register")
+            return apology("You must provide an username")
 
         # check password
         if not request.form.get('password'):
             status = False
-            return apology("You must provide a password", 403, "register.html")
+            return apology("You must provide a password")
 
         # check password confirmation
         if not request.form.get('password') == request.form.get('confirm_password'):
             status = False
-            return apology("Password confirmation not match", 403, "register.html")
+            return apology("Password confirmation not match")
 
         # check unique username
         exists_username= db.execute("SELECT username FROM users where username = :username", username = username)
         if exists_username:
             status = False
-            return apology("Username already taken by another user")
+            return apology("Username already taken")
 
         # If the program didn't get into any of the above for the status to get false, it means we' re all good
         if status:
@@ -102,6 +100,11 @@ def register():
             session["user_id"] = register
             session["username"] = username
 
+            CREATE_USER_TABLE = db.execute("""CREATE TABLE :user (
+                                                symbol  STRING UNIQUE PRIMARY KEY,
+                                                company STRING (1000) ,
+                                                shares  INTEGER)""", user=username)
+
             flash("You are now registered.", "success")
             # Redirect user to home page
             return redirect("/")
@@ -110,29 +113,27 @@ def register():
     else:
         return render_template('register.html')
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])#✔️
 def login():
     """Log user in"""
-
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         rows = db.execute("SELECT * from users;") # Troubleshooting registered users, can be removed
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("Must provide username" , 403, "login.html") #rows can be removed from apology
+            return apology("You must provide an username") #rows can be removed from apology
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password",  403, "login.html")
+            return apology("You must provide a password")
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
       
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("Invalid username and/or password", 403, "login.html")
-
+            return apology("Invalid username and/or password")
         
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -150,7 +151,7 @@ def login():
 
         return render_template("login.html")
 
-@app.route("/logout")
+@app.route("/logout")#✔️
 def logout():
     """Log user out"""
 
@@ -160,19 +161,19 @@ def logout():
     flash("Successfully logged out.", "success")
     return redirect("/")
 
-@app.route("/quote", methods=["GET", "POST"])
+@app.route("/quote", methods=["GET", "POST"])#✔️
 @login_required
 def quote():
     """Lookup for symbol"""
     if request.method == "POST":
         if not request.form.get("symbol"):
-            return apology("Must provide a symbol e.g TSLA" , 403, "quote.html") 
+            return apology("Must provide a symbol e.g TSLA") 
         
         symbol = request.form.get('symbol')
         quote = lookup(symbol)
 
         if not quote:
-            return apology("Not found.", 403, "quote.html")
+            return apology("Symbol not found.")
 
         return render_template('quote.html', quote = quote)
 
@@ -181,7 +182,7 @@ def quote():
         # """Get stock quote."""
         return render_template("quote.html")
         
-@app.route("/buy", methods=["GET", "POST"])
+@app.route("/buy", methods=["GET", "POST"])#✔️
 @login_required
 def buy():
     if request.method == "POST":
@@ -193,7 +194,7 @@ def buy():
         symbol = request.form.get('symbol')
         
         if not request.form.get("symbol"):
-            return apology("Must provide a symbol e.g TSLA" , 403, "buy.html") 
+            return apology("Must must type in a symbol, e.g TSLA") 
         
         # Make sure it is integer, and always positive (abs)
         # I also forbid negative value in front end
@@ -201,12 +202,12 @@ def buy():
         shares = abs(int(request.form.get('shares'))) 
 
         if not request.form.get("shares"):
-            return apology("Must provide a share count" , 403, "buy.html") 
+            return apology("You must type in how many shares you want to purchase.") 
         
         quote = lookup(symbol)
 
         if not quote:
-            return apology("Symbol not valid.", 403, "buy.html")
+            return apology("Symbol not valid.")
         
         # check if enough cash left
         #create history entry and remove cash
@@ -258,9 +259,8 @@ def buy():
                                         transacted=dt_string)
 
                     # Congratulate message and redirect to index
-                    flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ( TOTAL :" + str(session["purchase_total"]) + ", REMAINING:" + str(session["updated_currency"]) + " )" , "success"  )
+                    flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each" , "success"  )
                     return redirect('/')
-
                 else:
                     # I moved it here because i dont want to take money away if an error happen with the shares
                     # calculate remaining currency and update  currency in db 
@@ -289,14 +289,13 @@ def buy():
                                         transacted=dt_string)
 
                     # Congratulate message and redirect to index
-                    flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ( TOTAL :" + str(session["purchase_total"]) + ", REMAINING:" + str(session["updated_currency"]) + " )" , "success"  )
+                    flash("Successfully purchased" + " " + str(shares) + "x" + " " + quote["symbol"] + " at" + " $" + str(quote["price"]) + " each ", "success"  )
                     return redirect('/')
-
             else:
-                return apology("Insufficient funds", 403, "buy.html")
+                return apology("Insufficient funds")
             
         else:
-            return apology("Insufficient funds", 403, "buy.html")
+            return apology("Your balance is negative")
         
 
 
@@ -307,13 +306,7 @@ def buy():
         # """Get stock quote."""
         return render_template("/buy.html")
 
-@app.route("/history")
-@login_required
-def history():
-    rows = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
-    return render_template("/history.html", rows=rows)
-
-@app.route("/sell", methods=["GET", "POST"])
+@app.route("/sell", methods=["GET", "POST"])#✔️
 @login_required
 def sell():
     if request.method == "POST":
@@ -325,13 +318,13 @@ def sell():
         symbol = request.form.get('symbol')
         
         if not request.form.get("symbol"):
-            return apology("Must provide a symbol e.g TSLA" , 403, "sell.html") 
+            return apology("You must type a symbol, e.g TSLA") 
         
         # If by any means it gets negative, it does the reverse ( SELL!)
         shares = abs(int(request.form.get('shares'))) 
 
         if not request.form.get("shares"):
-            return apology("Must provide a share count" , 403, "sell.html") 
+            return apology("You must type a share count") 
         
         # Get the active symbols and shares max
         rows = db.execute("SELECT * FROM :user_table", user_table=session["username"])
@@ -347,7 +340,7 @@ def sell():
                     quote = lookup(row["symbol"])
 
                     if not quote:
-                        return apology("Symbol not valid.", 403, "sell.html")
+                        return apology("Invalid symbol")
                     
                     #2. Substract the shares from total
                     remaining_shares = row["shares"] - shares
@@ -384,10 +377,15 @@ def sell():
                     flash("You have sold " + str(shares) + " x " + symbol + " for " + " " + "$" +str(sale), "success")
                     return redirect("/")
                 else:
-                    flash("You do not own that many shares to sell.", "danger")
-                    return redirect("/sell")
+                    return apology("You do not own that many shares to sell.")
 
     else:
         """Get available symbols to pick from and their max share count currently owned from the user database"""
         user_table = db.execute("SELECT symbol, shares FROM :username", username=session["username"]) #If i query only symbol, they return alphabetically ordered
         return render_template("/sell.html", data=user_table)
+
+@app.route("/history")#✔️
+@login_required
+def history():
+    rows = db.execute("SELECT * FROM history WHERE id = :id", id=session["user_id"])
+    return render_template("/history.html", rows=rows)
