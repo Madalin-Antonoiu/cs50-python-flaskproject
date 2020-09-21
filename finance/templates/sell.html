@@ -10,10 +10,11 @@
 
 
 {% block body %}
-
-    <div class="container mt-6">
+    
+    <div class="container mt-6"> {% if data %}
         <div class="notification mt-6 is-info">
-
+           
+            
             <form id="buy" action="/sell" method="POST">
 
                 <div class="field is-grouped">
@@ -46,11 +47,13 @@
             
             
             </form>
-            
+
             
 
         </div>
-
+        {% else %}
+        <h1>You have nothing to sell.</h1>
+    {% endif %}
     </div>
 
 
